@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 
-export const Restaurants = () => (
+export const Favourites = () => (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Restaurantes</Text>
+        <Text>favoritos</Text>
     </View>
 );
