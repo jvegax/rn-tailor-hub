@@ -1,4 +1,5 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 declare global {
     namespace ReactNavigation {
@@ -13,6 +14,7 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
     Restaurants: undefined;
+    RestaurantDetails: { id: string };
     Favourites: undefined;
     Profile: undefined;
 };
@@ -23,3 +25,5 @@ export type DrawerParamList = {
 };
 
 export type RootParamsList = DrawerParamList;
+
+export type RestaurantsNavigationProp = NativeStackNavigationProp<MainTabParamList, 'Restaurants'>;

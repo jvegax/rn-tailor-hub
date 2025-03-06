@@ -16,7 +16,6 @@ const DrawerIcon = ({ color = '#999999', ...props }: IconProps) => (
             fillRule="evenodd"
             d="M3 6a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm0 4a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm0 4a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm0 4a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Z"
             clipRule="evenodd"
-            opacity={0.35}
         />
     </Svg>
 );

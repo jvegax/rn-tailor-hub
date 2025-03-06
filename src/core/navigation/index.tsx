@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LoginScreen } from '@/views/auth/LoginScreen';
 import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
+import { RestaurantDetails } from '@/views/bottomTabs/modals/RestaurantDetails';
 import { Favourites } from '@/views/bottomTabs/Favourites';
 import { Profile } from '@/views/bottomTabs/Profile';
 import LocationIcon from '@/assets/icons/LocationIcon';
@@ -16,6 +17,7 @@ import UserIcon from '@/assets/icons/UserIcon';
 const AuthStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
+const RestaurantsStack = createNativeStackNavigator();
 
 // Stack de autenticación
 const AuthStackNavigator: FC = () => {
@@ -27,11 +29,29 @@ const AuthStackNavigator: FC = () => {
     );
 };
 
+// Stack para la pestaña Restaurants (lista y detalles)
+const RestaurantsStackNavigator: FC = () => {
+    return (
+        <RestaurantsStack.Navigator initialRouteName="Restaurants">
+            <RestaurantsStack.Screen
+                name="Restaurants"
+                component={Restaurants}
+                options={{ headerShown: false }}
+            />
+            <RestaurantsStack.Screen
+                name="RestaurantDetails"
+                component={RestaurantDetails}
+                options={{ title: 'Detalles del Restaurante' }}
+            />
+        </RestaurantsStack.Navigator>
+    );
+};
+
 // Navegador de Bottom Tabs para el Main Stack
 const MainTabNavigator: FC = () => {
     return (
         <BottomTabs.Navigator
-            initialRouteName="Restaurants"
+            initialRouteName="RestaurantsTab"
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -40,8 +60,8 @@ const MainTabNavigator: FC = () => {
             }}
         >
             <BottomTabs.Screen
-                name="Restaurants"
-                component={Restaurants}
+                name="RestaurantsTab"
+                component={RestaurantsStackNavigator}
                 options={{
                     tabBarIcon: ({ color, size }) => (
                         <LocationIcon color={color} width={size} height={size} />
