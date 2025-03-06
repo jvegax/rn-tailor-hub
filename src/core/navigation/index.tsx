@@ -43,7 +43,7 @@ const MainTabNavigator: FC = () => {
 export const AppNavigator: FC = () => {
     return (
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
+            <Drawer.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
                 <Drawer.Screen name="Auth" component={AuthStackNavigator} />
                 <Drawer.Screen name="Main" component={MainTabNavigator} />
             </Drawer.Navigator>
