@@ -5,7 +5,7 @@ import { StatusBar } from 'react-native';
 const App = (): React.JSX.Element => {
   return (
     <>
-      <StatusBar barStyle="default" />
+      <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
       <AppNavigator />
     </>
   );

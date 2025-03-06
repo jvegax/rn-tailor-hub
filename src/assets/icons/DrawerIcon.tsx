@@ -3,7 +3,7 @@ import Svg, { Path } from 'react-native-svg';
 import { memo } from 'react';
 import { IconProps } from './types';
 
-const DrawerIcon = ({ color = '#111827', ...props }: IconProps) => (
+const DrawerIcon = ({ color = '#999999', ...props }: IconProps) => (
     <Svg
         width={24}
         height={24}
