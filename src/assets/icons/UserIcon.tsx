@@ -1,10 +1,7 @@
 import * as React from 'react';
-import Svg, { SvgProps, Path } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { memo } from 'react';
-
-interface IconProps extends SvgProps {
-    color?: string;
-}
+import { IconProps } from './types';
 
 const UserIcon = ({ color = '#999999', ...props }: IconProps) => (
     <Svg width={24} height={24} fill="none" viewBox="0 0 32 32" {...props}>
