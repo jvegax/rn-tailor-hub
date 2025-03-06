@@ -8,6 +8,9 @@ import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
 import { Favourites } from '@/views/bottomTabs/Favourites';
 import { Profile } from '@/views/bottomTabs/Profile';
+import LocationIcon from '@/assets/icons/LocationIcon';
+import HeartIcon from '@/assets/icons/HeartIcon';
+import UserIcon from '@/assets/icons/UserIcon';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
@@ -17,9 +20,7 @@ const BottomTabs = createBottomTabNavigator();
 // Stack de autenticación
 const AuthStackNavigator: FC = () => {
     return (
-        <AuthStack.Navigator
-            initialRouteName="Login"
-            screenOptions={{ headerShown: false }}>
+        <AuthStack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
             <AuthStack.Screen name="Login" component={LoginScreen} />
             <AuthStack.Screen name="Register" component={RegisterScreen} />
         </AuthStack.Navigator>
@@ -31,10 +32,40 @@ const MainTabNavigator: FC = () => {
     return (
         <BottomTabs.Navigator
             initialRouteName="Restaurants"
-            screenOptions={{ headerShown: false }}>
-            <BottomTabs.Screen name="Restaurants" component={Restaurants} />
-            <BottomTabs.Screen name="Favourites" component={Favourites} />
-            <BottomTabs.Screen name="Profile" component={Profile} />
+            screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: '#000',
+                tabBarInactiveTintColor: '#8a8a8a',
+            }}
+        >
+            <BottomTabs.Screen
+                name="Restaurants"
+                component={Restaurants}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <LocationIcon color={color} width={size} height={size} />
+                    ),
+                }}
+            />
+            <BottomTabs.Screen
+                name="Favourites"
+                component={Favourites}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <HeartIcon color={color} width={size} height={size} />
+                    ),
+                }}
+            />
+            <BottomTabs.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <UserIcon color={color} width={size} height={size} />
+                    ),
+                }}
+            />
         </BottomTabs.Navigator>
     );
 };
