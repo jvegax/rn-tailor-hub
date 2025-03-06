@@ -3,21 +3,25 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View } from 'react-native';
 import { LoginScreen } from '@/views/auth/LoginScreen';
 import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
 import { RestaurantDetails } from '@/views/bottomTabs/modals/RestaurantDetails';
+import { CreateNewRestaurant } from '@/views/bottomTabs/modals/CreateNewRestaurant';
 import { Favourites } from '@/views/bottomTabs/Favourites';
 import { Profile } from '@/views/bottomTabs/Profile';
 import LocationIcon from '@/assets/icons/LocationIcon';
 import HeartIcon from '@/assets/icons/HeartIcon';
 import UserIcon from '@/assets/icons/UserIcon';
+import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
 const RestaurantsStack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
 
 // Stack de autenticación
 const AuthStackNavigator: FC = () => {
@@ -47,56 +51,77 @@ const RestaurantsStackNavigator: FC = () => {
     );
 };
 
-// Navegador de Bottom Tabs para el Main Stack
+// Navigator de Bottom Tabs (solo tres pestañas)
 const MainTabNavigator: FC = () => {
     return (
-        <BottomTabs.Navigator
-            initialRouteName="RestaurantsTab"
-            screenOptions={{
-                headerShown: false,
-                tabBarShowLabel: false,
-                tabBarActiveTintColor: '#000',
-                tabBarInactiveTintColor: '#8a8a8a',
-            }}
-        >
-            <BottomTabs.Screen
-                name="RestaurantsTab"
-                component={RestaurantsStackNavigator}
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <LocationIcon color={color} width={size} height={size} />
-                    ),
+        <View style={{ flex: 1 }}>
+            <BottomTabs.Navigator
+                initialRouteName="RestaurantsTab"
+                screenOptions={{
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarActiveTintColor: '#000',
+                    tabBarInactiveTintColor: '#8a8a8a',
                 }}
-            />
-            <BottomTabs.Screen
-                name="Favourites"
-                component={Favourites}
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <HeartIcon color={color} width={size} height={size} />
-                    ),
-                }}
-            />
-            <BottomTabs.Screen
-                name="Profile"
-                component={Profile}
-                options={{
-                    tabBarIcon: ({ color, size }) => (
-                        <UserIcon color={color} width={size} height={size} />
-                    ),
-                }}
-            />
-        </BottomTabs.Navigator>
+            >
+                <BottomTabs.Screen
+                    name="RestaurantsTab"
+                    component={RestaurantsStackNavigator}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                            <LocationIcon color={color} width={size} height={size} />
+                        ),
+                    }}
+                />
+                <BottomTabs.Screen
+                    name="Favourites"
+                    component={Favourites}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                            <HeartIcon color={color} width={size} height={size} />
+                        ),
+                    }}
+                />
+                <BottomTabs.Screen
+                    name="Profile"
+                    component={Profile}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                            <UserIcon color={color} width={size} height={size} />
+                        ),
+                    }}
+                />
+            </BottomTabs.Navigator>
+            <FloatingButton />
+        </View>
     );
 };
 
-// Drawer que contiene ambos navigators
+// Main Stack que envuelve los BottomTabs y la pantalla modal de CreateNewRestaurant
+const MainStackNavigator: FC = () => {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen
+                name="MainTabs"
+                component={MainTabNavigator}
+                options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+                name="CreateNewRestaurant"
+                component={CreateNewRestaurant}
+                options={{ presentation: 'modal', title: 'Crear Restaurante' }}
+            />
+        </MainStack.Navigator>
+    );
+};
+
+// Drawer que contiene ambos navigators (Auth y Main)
 export const AppNavigator: FC = () => {
     return (
         <NavigationContainer>
             <Drawer.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
                 <Drawer.Screen name="Auth" component={AuthStackNavigator} />
-                <Drawer.Screen name="Main" component={MainTabNavigator} />
+                <Drawer.Screen name="Main" component={MainStackNavigator} />
             </Drawer.Navigator>
         </NavigationContainer>
     );
