@@ -2,8 +2,9 @@ import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { memo } from 'react';
 import { IconProps } from './types';
+import { colors } from '@/common/theme/colors';
 
-const UserIcon = ({ color = '#999999', ...props }: IconProps) => (
+const UserIcon = ({ color = colors.tailorGrayIcon, ...props }: IconProps) => (
     <Svg width={24} height={24} fill="none" viewBox="0 0 32 32" {...props}>
         <Path
             fill={color}

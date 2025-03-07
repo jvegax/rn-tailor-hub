@@ -2,12 +2,13 @@ import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { memo } from 'react';
 import { IconProps } from './types';
+import { colors } from '@/common/theme/colors';
 
-const TailorLogo = ({ size = 24, color = '#0B0B0B', ...props }: IconProps) => (
+const TailorLogo = ({ size = 154, color = colors.tailorBlack, ...props }: IconProps) => (
     <Svg
         width={size}
         height={size}
-        viewBox="0 0 154 50"
+        viewBox="0 0 154 35"
         fill="none"
         {...props}
     >
