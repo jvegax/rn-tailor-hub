@@ -50,7 +50,7 @@ export const RegisterScreen = () => {
 
     return (
         <View style={styles.container}>
-            <TailorLogo color={colors.tailorBlue} size={154} />
+            <TailorLogo color={colors.tailorBlue} />
 
             {/* Contenedor principal del formulario */}
             <View style={styles.form}>

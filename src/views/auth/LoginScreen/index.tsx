@@ -9,10 +9,7 @@ export const LoginScreen = () => {
     const navigation = useNavigation<NavigationProp<DrawerParamList>>();
     return (
         <View style={styles.container}>
-            <TailorLogo
-                color={colors.tailorBlue}
-                size={154}
-            />
+            <TailorLogo color={colors.tailorBlue} />
             {/* form */}
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
