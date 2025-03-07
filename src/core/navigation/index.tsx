@@ -15,6 +15,7 @@ import LocationIcon from '@/assets/icons/LocationIcon';
 import HeartIcon from '@/assets/icons/HeartIcon';
 import UserIcon from '@/assets/icons/UserIcon';
 import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
+import tailorTheme from '@/common/theme';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
@@ -118,7 +119,7 @@ const MainStackNavigator: FC = () => {
 // Drawer que contiene ambos navigators (Auth y Main)
 export const AppNavigator: FC = () => {
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={tailorTheme}>
             <Drawer.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
                 <Drawer.Screen name="Auth" component={AuthStackNavigator} />
                 <Drawer.Screen name="Main" component={MainStackNavigator} />

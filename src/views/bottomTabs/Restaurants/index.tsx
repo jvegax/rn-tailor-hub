@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerParamList, RestaurantsNavigationProp } from '@/core/navigation/types';
 import MapsIcon from '@/assets/icons/MapsIcon';
 import DrawerIcon from '@/assets/icons/DrawerIcon';
+import { colors } from '@/common/theme/colors';
 
 export const Restaurants = () => {
     const [isMapMode, setIsMapMode] = useState(false);
@@ -26,7 +27,7 @@ export const Restaurants = () => {
                 <Text style={styles.headerTitle}>{isMapMode ? 'Mapa' : 'Restaurantes'}</Text>
                 <View style={styles.headerIcons}>
                     <TouchableOpacity onPress={handleToggleMap} style={styles.iconButton}>
-                        <MapsIcon color={isMapMode ? 'black' : '#999999'} width={24} height={24} />
+                        <MapsIcon color={isMapMode ? 'black' : colors.tailorGrayIcon} width={24} height={24} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={openDrawer} style={styles.iconButton}>
                         <DrawerIcon width={24} height={24} />
