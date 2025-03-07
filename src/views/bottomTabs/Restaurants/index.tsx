@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerParamList, RestaurantsNavigationProp } from '@/core/navigation/types';
 import MapsIcon from '@/assets/icons/MapsIcon';
 import DrawerIcon from '@/assets/icons/DrawerIcon';
+import { colors } from '@/common/theme/colors';
 
 export const Restaurants = () => {
     const [isMapMode, setIsMapMode] = useState(false);
