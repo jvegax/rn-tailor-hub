@@ -22,7 +22,7 @@ const FloatingButton: React.FC = () => {
 const styles = StyleSheet.create({
     floatingButton: {
         position: 'absolute',
-        bottom: 120,
+        bottom: 100,
         right: 20,
         width: 56,
         height: 56,
