@@ -46,7 +46,7 @@ const RestaurantsStackNavigator: FC = () => {
             <RestaurantsStack.Screen
                 name="RestaurantDetails"
                 component={RestaurantDetails}
-                options={{ title: 'Detalles del Restaurante' }}
+                options={{ title: 'Detalles del Restaurante', headerShown: false }}
             />
         </RestaurantsStack.Navigator>
     );

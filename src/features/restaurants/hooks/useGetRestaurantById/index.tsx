@@ -16,19 +16,17 @@ export const useGetRestaurantById = (id: number): NetworkData<Restaurant> => {
     });
 
     const networkData = useMemo(() => {
-        if (!data?.id || isError) {
+        if (isLoading) {
+            const loading: NetworkData<Restaurant> = { type: 'loading' };
+            return loading;
+        }
+
+        if (isError || !data) {
             const error: NetworkData<Restaurant> = {
                 type: 'error',
                 message: 'Error al obtener el restaurante',
             };
             return error;
-        }
-
-        if (isLoading) {
-            const loading: NetworkData<Restaurant> = {
-                type: 'loading',
-            };
-            return loading;
         }
 
         const restaurant: NetworkData<Restaurant> = {
