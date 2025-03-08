@@ -4,22 +4,32 @@ import { useGetRestaurantById } from '@/features/restaurants/hooks/useGetRestaur
 import { Restaurant } from '@/features/restaurants/models';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { FC, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from './Header';
+import TextBase from '@/common/components/TextBase';
+import ReviewForm from './ReviewForm';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type RestaurantDetailsRouteProp = RouteProp<MainTabParamList, 'RestaurantDetails'>;
 
 export const RestaurantDetails: FC = () => {
     const navigation = useNavigation();
+    const { top } = useSafeAreaInsets();
     const { params } = useRoute<RestaurantDetailsRouteProp>();
     const networkData = useGetRestaurantById(params.id);
 
     const renderRestaurantDetails = useCallback((data: Restaurant) => (
-        <SafeAreaView style={styles.container}>
+        <ScrollView style={[styles.container, { paddingTop: top }]}>
             <Header restaurant={data} goBack={navigation.goBack} />
-        </SafeAreaView>
-    ), [navigation]);
+            <View style={styles.descriptionContainer}>
+                <TextBase size={16} style={styles.descriptionText}>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, perspiciatis possimus? Sunt dolorum fuga ab optio dolores nobis adipisci beatae laborum, earum, facilis eius quos, id ullam aliquam qui molestias?
+                </TextBase>
+            </View>
+            <ReviewForm />
+        </ScrollView>
+    ), [navigation, top]);
 
     return (
         <NetworkData
@@ -33,5 +43,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+    },
+    descriptionContainer: {
+        marginTop: 16,
+    },
+    descriptionText: {
+        lineHeight: 24,
     },
 });

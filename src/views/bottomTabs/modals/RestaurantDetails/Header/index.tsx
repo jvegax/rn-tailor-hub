@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, View, Pressable } from 'react-native';
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import { Restaurant } from '@/features/restaurants/models';
 import TextBase from '@/common/components/TextBase';
 import GoBackIcon from '@/assets/icons/GoBackIcon';
@@ -9,11 +9,13 @@ import HeartIconFill from '@/assets/icons/HeartIconFill';
 type Props = { restaurant: Restaurant, goBack: () => void };
 
 const Header: FC<Props> = ({ restaurant, goBack }) => {
+    const handlePressFavorite = useCallback(() => console.log('Favorite'), []);
+
     return (
         <ImageBackground
             source={{ uri: restaurant.image }}
             style={styles.image}
-            imageStyle={{ borderRadius: 16 }}
+            imageStyle={styles.imageStyle}
         >
             {/*  icon y heartIcon */}
             <View style={styles.overlay} />
@@ -21,14 +23,14 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
                 <Pressable onPress={goBack} style={styles.actionWrapper}>
                     <GoBackIcon />
                 </Pressable>
-                <Pressable style={styles.actionWrapper}>
+                <Pressable style={styles.actionWrapper} onPress={handlePressFavorite}>
                     <HeartIconFill
                         borderColor={colors.tailorWhite}
                         fillColor={colors.tailorWhite}
                     />
                 </Pressable>
             </View>
-            <TextBase color="tailorWhite" size={24} weight="bold">
+            <TextBase color="tailorWhite" size={24} weight="bold" style={styles.title}>
                 {restaurant.name}
             </TextBase>
             <TextBase color="tailorWhite" size={16}>
@@ -47,12 +49,24 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
+    imageStyle: {
+        borderRadius: 16,
+    },
+    title: {
+        marginBottom: 8,
+    },
     overlay: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: 16,
     },
-    actionsContainer: { flexDirection: 'row', justifyContent: 'space-between', width: '100%', padding: 16, marginBottom: 25 },
+    actionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: 16,
+        marginBottom: 20,
+    },
     actionWrapper: {
         justifyContent: 'center',
         alignItems: 'center',
