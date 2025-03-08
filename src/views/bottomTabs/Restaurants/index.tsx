@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DrawerParamList, RestaurantsNavigationProp } from '@/core/navigation/types';
+import { RestaurantsNavigationProp } from '@/core/navigation/types';
 import MapsIcon from '@/assets/icons/MapsIcon';
 import DrawerIcon from '@/assets/icons/DrawerIcon';
 import { colors } from '@/common/theme/colors';
+import RestaurantMap from './RestaurantMap';
+import RestaurantList from './RestaurantList';
 
 export const Restaurants = () => {
-    const [isMapMode, setIsMapMode] = useState(false);
-
     const navigation = useNavigation<RestaurantsNavigationProp>();
+    const [isMapMode, setIsMapMode] = useState(false);
     const handleToggleMap = () => setIsMapMode((prev) => !prev);
-    const openDrawer = () => {
-        navigation.getParent<DrawerNavigationProp<DrawerParamList>>()?.openDrawer();
-    };
-    const handleGoToDetails = () => {
-        navigation.navigate('RestaurantDetails', { id: 'abc123' });
-    };
+    const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer());
 
     return (
         <SafeAreaView style={styles.container}>
@@ -36,18 +31,11 @@ export const Restaurants = () => {
             </View>
 
             {/* Contenido */}
-            <View style={styles.content}>
-                {isMapMode ? (
-                    <Text>mapa de restaurantes aqui</Text>
-                ) : (
-                    <>
-                        <Text>Restaurantes</Text>
-                        <TouchableOpacity onPress={handleGoToDetails} style={styles.detailsButton}>
-                            <Text style={{ color: 'blue' }}>Ver Detalles</Text>
-                        </TouchableOpacity>
-                    </>
-                )}
-            </View>
+            {isMapMode ? (
+                <RestaurantMap />
+            ) : (
+                <RestaurantList navigation={navigation} />
+            )}
         </SafeAreaView>
     );
 };
@@ -65,6 +53,5 @@ const styles = StyleSheet.create({
     headerTitle: { fontSize: 20, fontWeight: 'bold' },
     headerIcons: { flexDirection: 'row' },
     iconButton: { marginLeft: 16 },
-    content: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     detailsButton: { marginTop: 16 },
 });

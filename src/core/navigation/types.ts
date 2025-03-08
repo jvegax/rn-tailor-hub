@@ -14,7 +14,7 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
     Restaurants: undefined;
-    RestaurantDetails: { id: string };
+    RestaurantDetails: { id: number };
     CreateNewRestaurant: undefined;
     Favourites: undefined;
     Profile: undefined;
