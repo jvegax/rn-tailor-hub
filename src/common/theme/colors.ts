@@ -7,4 +7,5 @@ export const colors = {
     tailorBlack: '#0B0B0B',
     tailorGray: '#F1F1F0',
     tailorGrayIcon: '#999999',
+    tailorGray900: '#111827',
 };

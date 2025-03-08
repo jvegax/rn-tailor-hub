@@ -1,37 +1,31 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import React, { FC, memo } from 'react';
-import { Restaurant } from '@/features/restaurants/models';
 import TextBase from '@/common/components/TextBase';
 import HeartIcon from '@/assets/icons/HeartIcon';
+import HeartIconFill from '@/assets/icons/HeartIconFill';
 import { colors } from '@/common/theme/colors';
 import RatingStars from '../RatingStars';
-
-type Props = {
-    item: Restaurant;
-    onPress: (id: number) => void;
-};
+import { Props } from './types';
+import { useFavorites } from '@/core/providers/favourites';
 
 const RestaurantItem: FC<Props> = ({ item, onPress }) => {
-    const handleAddFavorite = () => {
-        console.log(`Añadiendo el restaurante ${item.id} a favoritos`);
+    const { favorites, toggleFavorite } = useFavorites();
+    const isFavorite = favorites.some(r => r.id === item.id);
+
+    const handleToggleFavorite = () => {
+        toggleFavorite(item);
     };
 
     const averageRating =
         item.reviews.length > 0
-            ? item.reviews.reduce((sum, review) => sum + review.rating, 0) /
-            item.reviews.length
+            ? item.reviews.reduce((sum, review) => sum + review.rating, 0) / item.reviews.length
             : 0;
 
     return (
         <View style={styles.container}>
-            {/* Sección izquierda + central: se navega al pulsar sobre esta zona */}
-            <Pressable
-                onPress={() => onPress(item.id)}
-                style={styles.leftAndMiddleContainer}
-            >
-                {/* Imagen */}
+            {/* Sección izquierda + central: Presionable para navegar */}
+            <Pressable onPress={() => onPress(item.id)} style={styles.leftAndMiddleContainer}>
                 <Image source={{ uri: item.image }} style={styles.image} />
-                {/* Contenedor vertical para la información */}
                 <View style={styles.middle}>
                     <TextBase weight="bold" size={16}>
                         {item.name}
@@ -45,9 +39,13 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
                     </View>
                 </View>
             </Pressable>
-            {/* Sección derecha: icono de corazón para añadir a favoritos */}
-            <Pressable onPress={handleAddFavorite} style={styles.iconContainer} hitSlop={32}>
-                <HeartIcon color={colors.tailorBlack} width={24} height={24} />
+            {/* Sección derecha: Icono de corazón para favoritos */}
+            <Pressable onPress={handleToggleFavorite} style={styles.iconContainer} hitSlop={32}>
+                {isFavorite ? (
+                    <HeartIconFill fillColor={colors.tailorBlack} width={24} height={24} />
+                ) : (
+                    <HeartIcon color={colors.tailorBlack} width={24} height={24} />
+                )}
             </Pressable>
         </View>
     );
@@ -81,7 +79,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     iconContainer: {
-        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 8,
     },
     reviews: {
         flexDirection: 'row',

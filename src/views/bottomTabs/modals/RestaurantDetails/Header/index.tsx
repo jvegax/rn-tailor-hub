@@ -4,7 +4,7 @@ import { Restaurant } from '@/features/restaurants/models';
 import TextBase from '@/common/components/TextBase';
 import GoBackIcon from '@/assets/icons/GoBackIcon';
 import { colors } from '@/common/theme/colors';
-import HeartIconFill from '@/assets/icons/HeartIconFill';
+import HeartIcon from '@/assets/icons/HeartIcon';
 
 type Props = { restaurant: Restaurant, goBack: () => void };
 
@@ -24,10 +24,7 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
                     <GoBackIcon />
                 </Pressable>
                 <Pressable style={styles.actionWrapper} onPress={handlePressFavorite}>
-                    <HeartIconFill
-                        borderColor={colors.tailorWhite}
-                        fillColor={colors.tailorWhite}
-                    />
+                    <HeartIcon color={colors.tailorWhite} />
                 </Pressable>
             </View>
             <TextBase color="tailorWhite" size={24} weight="bold" style={styles.title}>
