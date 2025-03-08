@@ -33,6 +33,7 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
                 styles.container,
                 { paddingBottom: insets.bottom + 16 },
             ]}
+            showsVerticalScrollIndicator={false}
         />
     );
 };
@@ -43,6 +44,5 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 16,
-        gap: 16,
     },
 });

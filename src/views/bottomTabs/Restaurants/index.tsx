@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RestaurantsNavigationProp } from '@/core/navigation/types';
@@ -8,6 +8,7 @@ import DrawerIcon from '@/assets/icons/DrawerIcon';
 import { colors } from '@/common/theme/colors';
 import RestaurantMap from './RestaurantMap';
 import RestaurantList from './RestaurantList';
+import TextBase from '@/common/components/TextBase';
 
 export const Restaurants = () => {
     const navigation = useNavigation<RestaurantsNavigationProp>();
@@ -19,7 +20,7 @@ export const Restaurants = () => {
         <SafeAreaView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>{isMapMode ? 'Mapa' : 'Restaurantes'}</Text>
+                <TextBase size={24} weight="bold">{isMapMode ? 'Mapa' : 'Restaurantes'}</TextBase>
                 <View style={styles.headerIcons}>
                     <TouchableOpacity onPress={handleToggleMap} style={styles.iconButton}>
                         <MapsIcon color={isMapMode ? 'black' : colors.tailorGrayIcon} width={24} height={24} />

@@ -1,15 +1,20 @@
 import { StyleSheet, ImageBackground, View, Pressable } from 'react-native';
 import React, { FC, memo, useCallback } from 'react';
-import { Restaurant } from '@/features/restaurants/models';
 import TextBase from '@/common/components/TextBase';
 import GoBackIcon from '@/assets/icons/GoBackIcon';
 import { colors } from '@/common/theme/colors';
+import HeartIcon from '@/assets/icons/HeartIcon';
 import HeartIconFill from '@/assets/icons/HeartIconFill';
-
-type Props = { restaurant: Restaurant, goBack: () => void };
+import { useFavorites } from '@/core/providers/favourites';
+import { Props } from './types';
 
 const Header: FC<Props> = ({ restaurant, goBack }) => {
-    const handlePressFavorite = useCallback(() => console.log('Favorite'), []);
+    const { favorites, toggleFavorite } = useFavorites();
+    const isFavorite = favorites.some(r => r.id === restaurant.id);
+
+    const handlePressFavorite = useCallback(() => {
+        toggleFavorite(restaurant);
+    }, [toggleFavorite, restaurant]);
 
     return (
         <ImageBackground
@@ -17,17 +22,17 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
             style={styles.image}
             imageStyle={styles.imageStyle}
         >
-            {/*  icon y heartIcon */}
             <View style={styles.overlay} />
             <View style={styles.actionsContainer}>
                 <Pressable onPress={goBack} style={styles.actionWrapper}>
                     <GoBackIcon />
                 </Pressable>
-                <Pressable style={styles.actionWrapper} onPress={handlePressFavorite}>
-                    <HeartIconFill
-                        borderColor={colors.tailorWhite}
-                        fillColor={colors.tailorWhite}
-                    />
+                <Pressable onPress={handlePressFavorite} style={styles.actionWrapper}>
+                    {isFavorite ? (
+                        <HeartIconFill fillColor={colors.tailorWhite} width={24} height={24} />
+                    ) : (
+                        <HeartIcon color={colors.tailorWhite} width={24} height={24} />
+                    )}
                 </Pressable>
             </View>
             <TextBase color="tailorWhite" size={24} weight="bold" style={styles.title}>

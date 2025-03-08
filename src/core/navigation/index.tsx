@@ -45,11 +45,6 @@ const RestaurantsStackNavigator: FC = () => {
                 component={Restaurants}
                 options={{ headerShown: false }}
             />
-            <RestaurantsStack.Screen
-                name="RestaurantDetails"
-                component={RestaurantDetails}
-                options={{ title: 'Detalles del Restaurante', headerShown: false }}
-            />
         </RestaurantsStack.Navigator>
     );
 };
@@ -113,6 +108,11 @@ const MainStackNavigator: FC = () => {
                 name="CreateNewRestaurant"
                 component={CreateNewRestaurant}
                 options={{ presentation: 'modal', title: 'Crear Restaurante' }}
+            />
+            <RestaurantsStack.Screen
+                name="RestaurantDetails"
+                component={RestaurantDetails}
+                options={{ title: 'Detalles del Restaurante', headerShown: false }}
             />
         </MainStack.Navigator>
     );
