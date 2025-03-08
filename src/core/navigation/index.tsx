@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/no-unstable-nested-components */
 import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -46,7 +48,7 @@ const RestaurantsStackNavigator: FC = () => {
             <RestaurantsStack.Screen
                 name="RestaurantDetails"
                 component={RestaurantDetails}
-                options={{ title: 'Detalles del Restaurante' }}
+                options={{ title: 'Detalles del Restaurante', headerShown: false }}
             />
         </RestaurantsStack.Navigator>
     );
