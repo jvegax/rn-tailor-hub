@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Restaurant } from '@/features/restaurants/models';
 import { storage } from '@/core/cache';
 
-const FAVORITES_KEY = 'favorite_restaurants';
+const FAVORITES_KEY = 'favourite_restaurants';
 
 interface FavoritesContextType {
   favorites: Restaurant[];

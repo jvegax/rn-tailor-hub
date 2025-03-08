@@ -5,11 +5,12 @@ import { Restaurant } from '@/features/restaurants/models';
 import { colors } from '@/common/theme/colors';
 import RestaurantItem from '../components/RestaurantItem';
 import { useFavorites } from '@/core/providers/favourites';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 export const Favourites = () => {
     const navigation = useNavigation();
+    const { bottom } = useSafeAreaInsets();
     const { favorites } = useFavorites();
 
     const navigateRestaurantDetails = useCallback(
@@ -17,7 +18,7 @@ export const Favourites = () => {
         [navigation]
     );
 
-    const renderItem = useCallback(
+    const renderRestaurantItem = useCallback(
         ({ item }: { item: Restaurant }) => (
             <RestaurantItem item={item} onPress={() => navigateRestaurantDetails(item.id)} />
         ),
@@ -32,8 +33,12 @@ export const Favourites = () => {
             <FlatList
                 data={favorites}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={renderItem}
-                contentContainerStyle={styles.listContent}
+                renderItem={renderRestaurantItem}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[
+                    styles.list,
+                    { paddingBottom: bottom + 16 },
+                ]}
             />
         </SafeAreaView>
     );
@@ -50,7 +55,7 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 16,
     },
-    listContent: {
-        paddingBottom: 16,
+    list: {
+        flexGrow: 1,
     },
 });

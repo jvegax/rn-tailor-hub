@@ -11,10 +11,7 @@ import { useFavorites } from '@/core/providers/favourites';
 const RestaurantItem: FC<Props> = ({ item, onPress }) => {
     const { favorites, toggleFavorite } = useFavorites();
     const isFavorite = favorites.some(r => r.id === item.id);
-
-    const handleToggleFavorite = () => {
-        toggleFavorite(item);
-    };
+    const handleToggleFavorite = () => toggleFavorite(item);
 
     const averageRating =
         item.reviews.length > 0
@@ -79,9 +76,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     iconContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 8,
+        height: '100%',
     },
     reviews: {
         flexDirection: 'row',
