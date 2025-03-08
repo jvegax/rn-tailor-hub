@@ -31,7 +31,7 @@ const ReviewForm: FC = () => {
             {/* Input de review */}
             <TextInput
                 style={styles.input}
-                placeholder="Escribe tu review..."
+                placeholder="Escribe tu comentario sobre el restaurante..."
                 placeholderTextColor={colors.tailorGrayIcon}
                 multiline
                 maxLength={500}
