@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RestaurantsNavigationProp } from '@/core/navigation/types';
 import MapsIcon from '@/assets/icons/MapsIcon';
 import DrawerIcon from '@/assets/icons/DrawerIcon';
@@ -11,13 +11,14 @@ import RestaurantList from './RestaurantList';
 import TextBase from '@/common/components/TextBase';
 
 export const Restaurants = () => {
+    const { top } = useSafeAreaInsets();
     const navigation = useNavigation<RestaurantsNavigationProp>();
     const [isMapMode, setIsMapMode] = useState(false);
     const handleToggleMap = () => setIsMapMode((prev) => !prev);
     const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer());
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: top }]}>
             {/* Header */}
             <View style={styles.header}>
                 <TextBase size={24} weight="bold">{isMapMode ? 'Mapa' : 'Restaurantes'}</TextBase>
@@ -37,19 +38,18 @@ export const Restaurants = () => {
             ) : (
                 <RestaurantList navigation={navigation} />
             )}
-        </SafeAreaView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff' },
+    container: { flex: 1, backgroundColor: colors.tailorWhite },
     header: {
-        height: 56,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        backgroundColor: '#fff',
+        backgroundColor: colors.tailorWhite,
     },
     headerTitle: { fontSize: 20, fontWeight: 'bold' },
     headerIcons: { flexDirection: 'row' },
