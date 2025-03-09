@@ -18,6 +18,7 @@ import HeartIcon from '@/assets/icons/HeartIcon';
 import UserIcon from '@/assets/icons/UserIcon';
 import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
 import tailorTheme from '@/common/theme';
+import { colors } from '@/common/theme/colors';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
@@ -58,8 +59,8 @@ const MainTabNavigator: FC = () => {
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
-                    tabBarActiveTintColor: '#000',
-                    tabBarInactiveTintColor: '#8a8a8a',
+                    tabBarActiveTintColor: colors.tailorBlack,
+                    tabBarInactiveTintColor: colors.tailorGrayIcon,
                 }}
             >
                 <BottomTabs.Screen

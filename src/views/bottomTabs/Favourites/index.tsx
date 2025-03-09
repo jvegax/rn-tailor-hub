@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import TextBase from '@/common/components/TextBase';
 import { Restaurant } from '@/features/restaurants/models';
 import { colors } from '@/common/theme/colors';
 import RestaurantItem from '../components/RestaurantItem';
 import { useFavorites } from '@/core/providers/favourites';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 export const Favourites = () => {
     const navigation = useNavigation();
-    const { bottom } = useSafeAreaInsets();
+    const { bottom, top } = useSafeAreaInsets();
     const { favorites } = useFavorites();
 
     const navigateRestaurantDetails = useCallback(
@@ -26,7 +26,7 @@ export const Favourites = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { paddingTop: top }]}>
             <TextBase weight="bold" size={24} color="tailorBlack" style={styles.title}>
                 Favoritos
             </TextBase>
@@ -40,7 +40,7 @@ export const Favourites = () => {
                     { paddingBottom: bottom + 16 },
                 ]}
             />
-        </SafeAreaView>
+        </View>
     );
 };
 
