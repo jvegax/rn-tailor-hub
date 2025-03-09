@@ -108,7 +108,7 @@ const MainStackNavigator: FC = () => {
             <MainStack.Screen
                 name="CreateNewRestaurant"
                 component={CreateNewRestaurant}
-                options={{ presentation: 'modal', title: 'Crear Restaurante' }}
+                options={{ title: 'Crear Restaurante', headerShown: false }}
             />
             <RestaurantsStack.Screen
                 name="RestaurantDetails"
