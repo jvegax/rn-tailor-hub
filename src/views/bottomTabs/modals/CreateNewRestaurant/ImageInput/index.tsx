@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
-import { Text, StyleSheet, Pressable, ImageBackground } from 'react-native';
+import React, { FC, memo } from 'react';
+import { StyleSheet, Pressable, ImageBackground } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { colors } from '@/common/theme/colors';
+import TextBase from '@/common/components/TextBase';
 
 type Props = {
     value: string;
@@ -32,29 +33,37 @@ const ImageInput: FC<Props> = ({ value, onChange }) => {
     if (!value) {
         return (
             <Pressable onPress={pickImage} style={styles.container}>
-                <Text style={styles.plus}>+</Text>
-                <Text style={styles.text}>Añadir imagen</Text>
+                <TextBase weight="400" size={32}>+</TextBase>
+                <TextBase weight="bold" size={16}>Añadir imagen</TextBase>
             </Pressable>
         );
     }
 
     return (
-        <ImageBackground source={{ uri: value }} style={styles.container} imageStyle={styles.imageStyle}>
+        <ImageBackground
+            source={{ uri: value }}
+            style={styles.container}
+            imageStyle={styles.imageStyle}
+        >
             <Pressable onPress={handleRemoveImage} style={styles.removeButton}>
-                <Text style={styles.removeButtonText}>Eliminar</Text>
+                <TextBase weight="bold" size={24} color="tailorWhite">
+                    Eliminar
+                </TextBase>
             </Pressable>
         </ImageBackground>
     );
 };
 
-export default ImageInput;
+export default memo(ImageInput);
 
 const styles = StyleSheet.create({
     container: {
         width: 200,
         height: 200,
         backgroundColor: colors.tailorGray,
-        borderRadius: 8,
+        borderRadius: 24,
+        borderWidth: 1,
+        borderColor: colors.tailorBlack,
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
@@ -62,22 +71,14 @@ const styles = StyleSheet.create({
     imageStyle: {
         borderRadius: 8,
     },
-    plus: {
-        fontSize: 48,
-        color: '#fff',
-    },
-    text: {
-        color: '#fff',
-        fontSize: 16,
-        marginTop: 8,
-    },
     removeButton: {
         position: 'absolute',
         alignSelf: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 4,
+        paddingVertical: 14,
+        borderWidth: 1,
+        borderColor: colors.tailorWhite,
+        paddingHorizontal: 24,
+        borderRadius: 24,
     },
     removeButtonText: {
         color: '#fff',
