@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import { AuthStackParamList } from '@/core/navigation/types';
-import TailorLogo from '@/assets/icons/TailorLogo';
+import TailorIcon from '@/assets/icons/TailorIcon';
 import { useAuth } from '@/core/providers/auth';
 
 export const LoginScreen = () => {
@@ -13,9 +13,12 @@ export const LoginScreen = () => {
     const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async () => {
+        setIsLoading(true);
         const success = await login(email, password);
+        setIsLoading(false);
         if (!success) {
             console.error('Error al iniciar sesión');
         }
@@ -23,7 +26,7 @@ export const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
-            <TailorLogo color={colors.tailorBlue} />
+            <TailorIcon color={colors.tailorBlue} />
             {/* Formulario */}
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
@@ -32,8 +35,9 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    onChangeText={setEmail}
                     placeholderTextColor={colors.tailorWhite}
+                    value={email}
+                    onChangeText={setEmail}
                 />
 
                 <TextBase weight="bold" color="tailorWhite">
@@ -42,15 +46,24 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Contraseña"
-                    onChangeText={setPassword}
                     placeholderTextColor={colors.tailorWhite}
                     secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
                 />
 
-                <Pressable style={styles.submitButton} onPress={handleLogin}>
-                    <TextBase size={16} weight="bold" color="tailorBlack">
-                        Entrar
-                    </TextBase>
+                <Pressable
+                    style={[styles.submitButton, isLoading && styles.disabledButton]}
+                    onPress={handleLogin}
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color={colors.tailorBlue} />
+                    ) : (
+                        <TextBase size={16} weight="bold" color="tailorBlack">
+                            Entrar
+                        </TextBase>
+                    )}
                 </Pressable>
 
                 <View style={styles.registerContainer}>
@@ -58,7 +71,12 @@ export const LoginScreen = () => {
                         ¿No tienes cuenta?
                     </TextBase>
                     <Pressable onPress={() => navigation.navigate('Register')}>
-                        <TextBase size={16} weight="bold" color="tailorWhite" style={styles.registerButton}>
+                        <TextBase
+                            size={16}
+                            weight="bold"
+                            color="tailorWhite"
+                            style={styles.registerButton}
+                        >
                             Regístrate
                         </TextBase>
                     </Pressable>
@@ -103,6 +121,9 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         alignItems: 'center',
         marginVertical: 8,
+    },
+    disabledButton: {
+        opacity: 0.6,
     },
     registerContainer: {
         flexDirection: 'row',
