@@ -14,6 +14,10 @@ export const useRestaurantForm = () => {
             name: '',
             address: '',
             description: '',
+            latlng: {
+                lat: 0,
+                lng: 0,
+            },
         },
     });
 

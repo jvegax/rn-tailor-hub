@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useAuth } from '@/core/providers/auth';
+import TextBase from '../TextBase';
 
 const CustomDrawerContent: FC<DrawerContentComponentProps> = (props) => {
     const { logout } = useAuth();
@@ -10,7 +11,7 @@ const CustomDrawerContent: FC<DrawerContentComponentProps> = (props) => {
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
             <Pressable onPress={logout} style={styles.logoutContainer} hitSlop={16}>
-                <Text style={styles.logoutText}>Cerrar sesión</Text>
+                <TextBase style={styles.logoutText}>Cerrar sesión</TextBase>
             </Pressable>
         </DrawerContentScrollView>
     );
@@ -25,7 +26,6 @@ const styles = StyleSheet.create({
     logoutText: {
         color: 'red',
         fontSize: 16,
-        fontWeight: 'bold',
     },
 });
 

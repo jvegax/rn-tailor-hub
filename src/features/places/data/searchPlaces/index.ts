@@ -17,6 +17,7 @@ export async function searchPlaces(query: string): Promise<SearchRestaurantResul
   }
 
   const results: SearchRestaurantResult[] = data.results.map((result: any) => ({
+    name: result.name,
     address: result.formatted_address,
     latlng: {
       lat: result.geometry.location.lat,
