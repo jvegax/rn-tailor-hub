@@ -1,11 +1,13 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native';
+import tailorTheme from '@/common/theme';
+import { colors } from '@/common/theme/colors';
+
+// Importa tus pantallas
 import { LoginScreen } from '@/views/auth/LoginScreen';
 import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
@@ -17,17 +19,17 @@ import LocationIcon from '@/assets/icons/LocationIcon';
 import HeartIcon from '@/assets/icons/HeartIcon';
 import UserIcon from '@/assets/icons/UserIcon';
 import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
-import tailorTheme from '@/common/theme';
-import { colors } from '@/common/theme/colors';
+import { useAuth } from '../providers/auth';
+import CustomDrawerContent from '@/common/components/CustomDrawerContent';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
 const RestaurantsStack = createNativeStackNavigator();
-const MainStack = createNativeStackNavigator();
 
-// Stack de autenticación
+// ---------- AUTH STACK (independiente) ----------
 const AuthStackNavigator: FC = () => {
     return (
         <AuthStack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -37,7 +39,7 @@ const AuthStackNavigator: FC = () => {
     );
 };
 
-// Stack para la pestaña Restaurants (lista y detalles)
+// ---------- RESTAURANTS STACK (lista y detalles) ----------
 const RestaurantsStackNavigator: FC = () => {
     return (
         <RestaurantsStack.Navigator initialRouteName="Restaurants">
@@ -46,14 +48,19 @@ const RestaurantsStackNavigator: FC = () => {
                 component={Restaurants}
                 options={{ headerShown: false }}
             />
+            <RestaurantsStack.Screen
+                name="RestaurantDetails"
+                component={RestaurantDetails}
+                options={{ headerShown: false }}
+            />
         </RestaurantsStack.Navigator>
     );
 };
 
-// Navigator de Bottom Tabs (solo tres pestañas)
+// ---------- BOTTOM TABS (para el MainStack) ----------
 const MainTabNavigator: FC = () => {
     return (
-        <View style={{ flex: 1 }}>
+        <>
             <BottomTabs.Navigator
                 initialRouteName="RestaurantsTab"
                 screenOptions={{
@@ -92,11 +99,11 @@ const MainTabNavigator: FC = () => {
                 />
             </BottomTabs.Navigator>
             <FloatingButton />
-        </View>
+        </>
     );
 };
 
-// Main Stack que envuelve los BottomTabs y la pantalla modal de CreateNewRestaurant
+// ---------- MAIN STACK (envuelve BottomTabs y modales) ----------
 const MainStackNavigator: FC = () => {
     return (
         <MainStack.Navigator>
@@ -108,25 +115,28 @@ const MainStackNavigator: FC = () => {
             <MainStack.Screen
                 name="CreateNewRestaurant"
                 component={CreateNewRestaurant}
-                options={{ presentation: 'modal', title: 'Crear Restaurante' }}
-            />
-            <RestaurantsStack.Screen
-                name="RestaurantDetails"
-                component={RestaurantDetails}
-                options={{ title: 'Detalles del Restaurante', headerShown: false }}
+                options={{ headerShown: false }}
             />
         </MainStack.Navigator>
     );
 };
 
-// Drawer que contiene ambos navigators (Auth y Main)
+// ---------- APP NAVIGATOR ----------
 export const AppNavigator: FC = () => {
+    const { authData } = useAuth();
+
     return (
         <NavigationContainer theme={tailorTheme}>
-            <Drawer.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
-                <Drawer.Screen name="Auth" component={AuthStackNavigator} />
-                <Drawer.Screen name="Main" component={MainStackNavigator} />
-            </Drawer.Navigator>
+            {authData ? (
+                <Drawer.Navigator
+                    screenOptions={{ headerShown: false }}
+                    drawerContent={(props) => <CustomDrawerContent {...props} />}
+                >
+                    <Drawer.Screen name="Main" component={MainStackNavigator} />
+                </Drawer.Navigator>
+            ) : (
+                <AuthStackNavigator />
+            )}
         </NavigationContainer>
     );
 };

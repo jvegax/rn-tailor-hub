@@ -1,16 +1,33 @@
-import TailorLogo from '@/assets/icons/TailorLogo';
+import React, { useState } from 'react';
+import { View, StyleSheet, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
-import { DrawerParamList } from '@/core/navigation/types';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { AuthStackParamList } from '@/core/navigation/types';
+import TailorIcon from '@/assets/icons/TailorIcon';
+import { useAuth } from '@/core/providers/auth';
 
 export const LoginScreen = () => {
-    const navigation = useNavigation<NavigationProp<DrawerParamList>>();
+    const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const { login } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLogin = async () => {
+        setIsLoading(true);
+        const success = await login(email, password);
+        setIsLoading(false);
+        if (!success) {
+            console.error('Error al iniciar sesión');
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <TailorLogo color={colors.tailorBlue} />
-            {/* form */}
+            <TailorIcon color={colors.tailorBlue} />
+            {/* Formulario */}
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
                     Email
@@ -18,7 +35,9 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor={colors.tailorGrayIcon}
+                    placeholderTextColor={colors.tailorWhite}
+                    value={email}
+                    onChangeText={setEmail}
                 />
 
                 <TextBase weight="bold" color="tailorWhite">
@@ -27,36 +46,36 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Contraseña"
-                    placeholderTextColor={colors.tailorGrayIcon}
+                    placeholderTextColor={colors.tailorWhite}
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
                 />
+
                 <Pressable
-                    style={styles.submitButton}
-                    onPress={() => navigation.navigate('Main', { screen: 'Restaurants' })}
+                    style={[styles.submitButton, isLoading && styles.disabledButton]}
+                    onPress={handleLogin}
+                    disabled={isLoading}
                 >
-                    <TextBase
-                        size={16}
-                        weight="bold"
-                        color="tailorBlack"
-                    >
-                        Entrar
-                    </TextBase>
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color={colors.tailorBlue} />
+                    ) : (
+                        <TextBase size={16} weight="bold" color="tailorBlack">
+                            Entrar
+                        </TextBase>
+                    )}
                 </Pressable>
+
                 <View style={styles.registerContainer}>
-                    <TextBase
-                        size={16}
-                        weight="bold"
-                        color="tailorWhite"
-                    >
+                    <TextBase size={16} weight="bold" color="tailorWhite">
                         ¿No tienes cuenta?
                     </TextBase>
-                    <Pressable
-                        onPress={() => navigation.navigate('Auth', { screen: 'Register' })}
-                    >
+                    <Pressable onPress={() => navigation.navigate('Register')}>
                         <TextBase
                             size={16}
                             weight="bold"
                             color="tailorWhite"
-                            style={{ textDecorationLine: 'underline' }}
+                            style={styles.registerButton}
                         >
                             Regístrate
                         </TextBase>
@@ -66,6 +85,8 @@ export const LoginScreen = () => {
         </View>
     );
 };
+
+export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -101,10 +122,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 8,
     },
+    disabledButton: {
+        opacity: 0.6,
+    },
     registerContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         marginTop: 24,
         gap: 8,
+    },
+    registerButton: {
+        textDecorationLine: 'underline',
     },
 });
