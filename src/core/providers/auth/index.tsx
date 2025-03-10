@@ -18,7 +18,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [authData, setAuthData] = useState<AuthData | null>(null);
 
-    // Al montar, carga la autenticación desde MMKV
     useEffect(() => {
         const token = storage.getString('authToken');
         const refreshToken = storage.getString('refreshToken');
