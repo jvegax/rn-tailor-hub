@@ -66,7 +66,7 @@ const MainTabNavigator: FC = () => {
                     headerShown: false,
                     tabBarShowLabel: false,
                     tabBarActiveTintColor: colors.tailorBlack,
-                    tabBarInactiveTintColor: colors.tailorGray,
+                    tabBarInactiveTintColor: colors.tailorGrayIcon,
                 }}
             >
                 <BottomTabs.Screen

@@ -1,5 +1,5 @@
 import { storage } from '@/core/cache';
-import { login } from '@/features/auth';
+import { login, logout } from '@/features/auth';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 export type AuthData = {
@@ -20,9 +20,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     useEffect(() => {
         const token = storage.getString('authToken');
-        const refreshToken = storage.getString('refreshToken');
-        if (token && refreshToken) {
-            setAuthData({ token, refreshToken });
+        const refreshTokenVal = storage.getString('refreshToken');
+        if (token && refreshTokenVal) {
+            setAuthData({ token, refreshToken: refreshTokenVal });
         }
     }, []);
 
@@ -35,14 +35,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return false;
     };
 
-    const logout = () => {
+    const logoutHandler = async () => {
+        await logout();
         setAuthData(null);
-        storage.delete('authToken');
-        storage.delete('refreshToken');
     };
 
     return (
-        <AuthContext.Provider value={{ authData, login: loginHandler, logout }}>
+        <AuthContext.Provider value={{ authData, login: loginHandler, logout: logoutHandler }}>
             {children}
         </AuthContext.Provider>
     );
@@ -51,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error('useAuth debe ser usado dentro de un AuthProvider');
     }
     return context;
 };
