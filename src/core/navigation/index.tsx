@@ -20,6 +20,7 @@ import HeartIcon from '@/assets/icons/HeartIcon';
 import UserIcon from '@/assets/icons/UserIcon';
 import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
 import { useAuth } from '../providers/auth';
+import CustomDrawerContent from '@/common/components/CustomDrawerContent';
 
 // Creación de navigators
 const AuthStack = createNativeStackNavigator();
@@ -127,7 +128,10 @@ export const AppNavigator: FC = () => {
     return (
         <NavigationContainer theme={tailorTheme}>
             {authData ? (
-                <Drawer.Navigator screenOptions={{ headerShown: false }}>
+                <Drawer.Navigator
+                    screenOptions={{ headerShown: false }}
+                    drawerContent={(props) => <CustomDrawerContent {...props} />}
+                >
                     <Drawer.Screen name="Main" component={MainStackNavigator} />
                 </Drawer.Navigator>
             ) : (
