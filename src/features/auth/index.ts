@@ -1,10 +1,12 @@
 import { storage } from '@/core/cache';
 
-const API_BASE_URL = 'https://technical-review-api-tailor.netlify.app/api';
+const API_BASE_URL = 'https://technical-review-api-tailor.netlify.app';
 
-export async function login(email: string, password: string): Promise<{ token: string; refreshToken: string } | null> {
+type LoginResponse = { token: string; refreshToken: string } | null;
+
+export async function login(email: string, password: string): Promise<LoginResponse> {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -17,10 +19,8 @@ export async function login(email: string, password: string): Promise<{ token: s
             return null;
         }
 
-        // Extrae el token del header "authorization"
         const token = response.headers.get('authorization');
 
-        // Extrae el refreshToken del header "set-cookie"
         const setCookie = response.headers.get('set-cookie');
         let refreshToken = '';
         if (setCookie) {
@@ -35,7 +35,6 @@ export async function login(email: string, password: string): Promise<{ token: s
             return null;
         }
 
-        // Persistir en MMKV
         storage.set('authToken', token);
         storage.set('refreshToken', refreshToken);
 

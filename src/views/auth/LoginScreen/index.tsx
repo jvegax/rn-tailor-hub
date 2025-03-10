@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -6,9 +6,20 @@ import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import { AuthStackParamList } from '@/core/navigation/types';
 import TailorLogo from '@/assets/icons/TailorLogo';
+import { useAuth } from '@/core/providers/auth';
 
 export const LoginScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const { login } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleLogin = async () => {
+        const success = await login(email, password);
+        if (!success) {
+            console.error('Error al iniciar sesión');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -21,6 +32,7 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
+                    onChangeText={setEmail}
                     placeholderTextColor={colors.tailorWhite}
                 />
 
@@ -30,11 +42,12 @@ export const LoginScreen = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Contraseña"
+                    onChangeText={setPassword}
                     placeholderTextColor={colors.tailorWhite}
                     secureTextEntry
                 />
 
-                <Pressable style={styles.submitButton} onPress={() => { }}>
+                <Pressable style={styles.submitButton} onPress={handleLogin}>
                     <TextBase size={16} weight="bold" color="tailorBlack">
                         Entrar
                     </TextBase>
@@ -45,7 +58,7 @@ export const LoginScreen = () => {
                         ¿No tienes cuenta?
                     </TextBase>
                     <Pressable onPress={() => navigation.navigate('Register')}>
-                        <TextBase size={16} weight="bold" color="tailorWhite" style={{ textDecorationLine: 'underline' }}>
+                        <TextBase size={16} weight="bold" color="tailorWhite" style={styles.registerButton}>
                             Regístrate
                         </TextBase>
                     </Pressable>
@@ -96,5 +109,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 24,
         gap: 8,
+    },
+    registerButton: {
+        textDecorationLine: 'underline',
     },
 });
