@@ -1,9 +1,10 @@
 import { SearchRestaurantResult } from '../../models';
+import Config from 'react-native-config';
 
-const GOOGLE_PLACES_API_KEY = '';
 const PLACES_API_URL = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
 
 export async function searchPlaces(query: string): Promise<SearchRestaurantResult[]> {
+  const GOOGLE_PLACES_API_KEY = Config.GOOGLE_PLACES_API_KEY;
   const url = `${PLACES_API_URL}?query=${encodeURIComponent(query)}&key=${GOOGLE_PLACES_API_KEY}`;
 
   const response = await fetch(url);
@@ -13,7 +14,7 @@ export async function searchPlaces(query: string): Promise<SearchRestaurantResul
   const data = await response.json();
 
   if (data.status !== 'OK' || !data.results) {
-    throw new Error(`Error en la búsqueda: ${data.status}`);
+    return [];
   }
 
   const results: SearchRestaurantResult[] = data.results.map((result: any) => ({

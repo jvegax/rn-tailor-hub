@@ -16,6 +16,7 @@ import { colors } from '@/common/theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { SearchRestaurantResult } from '@/features/places/models';
 import { searchPlaces } from '@/features/places/data/searchPlaces';
+import CustomBackdrop from '@/common/components/CustomBackdrop';
 
 export const CreateNewRestaurant: FC = () => {
     const { top } = useSafeAreaInsets();
@@ -151,6 +152,7 @@ export const CreateNewRestaurant: FC = () => {
                 snapPoints={snapPoints}
                 enableDynamicSizing={false}
                 backgroundStyle={styles.bottomSheetBackground}
+                backdropComponent={(props) => <CustomBackdrop {...props} onPress={closeSearchModal} />}
             >
                 <BottomSheetView style={styles.sheetContent}>
                     <TextInput
