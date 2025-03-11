@@ -17,7 +17,6 @@ export type AuthStackParamList = {
 // Stack para la pestaña Restaurants (lista y detalles)
 export type RestaurantsStackParamList = {
     Restaurants: undefined;
-    RestaurantDetails: { id: number };
 };
 
 // Bottom tabs dentro del MainStack
@@ -31,6 +30,7 @@ export type MainTabParamList = {
 export type MainStackParamList = {
     MainTabs: NavigatorScreenParams<MainTabParamList>;
     CreateNewRestaurant: undefined;
+    RestaurantDetails: { id: number };
 };
 
 // Drawer que contiene el MainStack (solo para el flujo principal)

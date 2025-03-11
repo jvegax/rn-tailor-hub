@@ -1,6 +1,5 @@
-import { MMKV } from 'react-native-mmkv';
+import { storage } from '@/core/cache';
 
-export const authStorage = new MMKV();
 const API_BASE_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
 type LoginResponse = { token: string; refreshToken: string } | null;
@@ -15,7 +14,6 @@ export async function login(email: string, password: string): Promise<LoginRespo
         });
 
         if (!response.ok) {
-            console.error('Error en login:', response.status);
             return null;
         }
 
@@ -35,8 +33,8 @@ export async function login(email: string, password: string): Promise<LoginRespo
             return null;
         }
 
-        authStorage.set('authToken', token);
-        authStorage.set('refreshToken', refreshToken);
+        storage.set('authToken', token);
+        storage.set('refreshToken', refreshToken);
 
         return { token, refreshToken };
     } catch (error) {
@@ -57,11 +55,11 @@ export async function refreshToken(): Promise<string | null> {
             if (setCookie) {
                 const match = setCookie.match(/refreshToken=([^;]+)/);
                 if (match) {
-                    authStorage.set('refreshToken', match[1]);
+                    storage.set('refreshToken', match[1]);
                 }
             }
             if (newToken) {
-                authStorage.set('authToken', newToken);
+                storage.set('authToken', newToken);
                 return newToken;
             }
         }
@@ -74,22 +72,27 @@ export async function refreshToken(): Promise<string | null> {
 
 export async function logout(): Promise<void> {
     try {
+        const token = storage.getString('authToken') ?? '';
+        const refreshTokenValue = storage.getString('refreshToken') ?? '';
         await fetch(`${API_BASE_URL}/auth/logout`, {
             method: 'GET',
             headers: {
-                'Authorization': authStorage.getString('authToken') ?? '',
+                'Authorization': `Bearer ${token}`,
+                'Cookie': `refreshToken=${refreshTokenValue}`,
             },
+            credentials: 'include',
         });
     } catch (error) {
         console.error('Error en logout:', error);
     } finally {
-        authStorage.delete('authToken');
-        authStorage.delete('refreshToken');
+        storage.delete('authToken');
+        storage.delete('refreshToken');
     }
 }
 
+
 export async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
-    const token = authStorage.getString('authToken');
+    const token = storage.getString('authToken');
     const headers = options.headers ? new Headers(options.headers) : new Headers();
     if (token) {
         headers.set('Authorization', token);
@@ -112,7 +115,7 @@ export async function authFetch(url: string, options: RequestInit = {}): Promise
 
     const newTokenFromResponse = response.headers.get('authorization');
     if (newTokenFromResponse && newTokenFromResponse !== token) {
-        authStorage.set('authToken', newTokenFromResponse);
+        storage.set('authToken', newTokenFromResponse);
     }
 
     return response;

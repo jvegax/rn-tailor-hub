@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import TextBase from '@/common/components/TextBase';
@@ -20,14 +20,13 @@ export const LoginScreen = () => {
         const success = await login(email, password);
         setIsLoading(false);
         if (!success) {
-            console.error('Error al iniciar sesión');
+            Alert.alert('Hubo un problema al iniciar sesión');
         }
     };
 
     return (
         <View style={styles.container}>
             <TailorIcon color={colors.tailorBlue} />
-            {/* Formulario */}
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
                     Email
@@ -85,8 +84,6 @@ export const LoginScreen = () => {
         </View>
     );
 };
-
-export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {

@@ -1,5 +1,5 @@
 import NetworkData from '@/common/domain/NetworkData';
-import { RestaurantsStackParamList } from '@/core/navigation/types';
+import { MainStackParamList } from '@/core/navigation/types';
 import { useGetRestaurantById } from '@/features/restaurants/hooks/useGetRestaurantById';
 import { Restaurant } from '@/features/restaurants/models';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import ReviewForm from './ReviewForm';
 import { ScrollView } from 'react-native-gesture-handler';
 import ReviewList from './ReviewList';
 
-type RestaurantDetailsRouteProp = RouteProp<RestaurantsStackParamList, 'RestaurantDetails'>;
+type RestaurantDetailsRouteProp = RouteProp<MainStackParamList, 'RestaurantDetails'>;
 
 export const RestaurantDetails: FC = () => {
     const navigation = useNavigation();

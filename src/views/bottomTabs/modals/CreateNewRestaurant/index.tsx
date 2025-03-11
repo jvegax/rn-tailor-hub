@@ -1,6 +1,12 @@
-/* eslint-disable react/no-unstable-nested-components */
 import React, { FC, memo } from 'react';
-import { View, StyleSheet, Pressable, FlatList, TextInput } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Pressable,
+    TextInput,
+    ActivityIndicator,
+    FlatList,
+} from 'react-native';
 import { Controller } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -15,14 +21,16 @@ import GoBackIcon from '@/assets/icons/GoBackIcon';
 import ImageInput from './ImageInput';
 import { useRestaurantForm } from './form';
 import { colors } from '@/common/theme/colors';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import CustomBackdrop from '@/common/components/CustomBackdrop';
 import { usePlacesBottomSheet } from './bottom-sheet';
 import SearchIcon from '@/assets/icons/SearchIcon';
+import { MainStackParamList } from '@/core/navigation/types';
 
 export const CreateNewRestaurant: FC = () => {
     const { top } = useSafeAreaInsets();
     const { form, submitForm } = useRestaurantForm();
+    const { isSubmitting } = form.formState;
     const bottomSheetModal = usePlacesBottomSheet({ form });
     const {
         bottomSheetModalRef,
@@ -35,13 +43,28 @@ export const CreateNewRestaurant: FC = () => {
         handleSelectResult,
     } = bottomSheetModal;
     const imageValue = form.watch('image');
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
+
+    const handleSubmit = async () => {
+        try {
+            const result = await submitForm();
+            if (result && result.id) {
+                navigation.navigate('RestaurantDetails', { id: result.id });
+            }
+        } catch (error) {
+            // La alerta ya se mostró en el hook.
+        }
+    };
 
     return (
         <BottomSheetModalProvider>
             <View style={[styles.container, { paddingTop: top }]}>
                 <View style={styles.header}>
-                    <Pressable style={styles.goBackContainer} onPress={() => navigation.goBack()} hitSlop={32}>
+                    <Pressable
+                        style={styles.goBackContainer}
+                        onPress={() => navigation.goBack()}
+                        hitSlop={32}
+                    >
                         <GoBackIcon color={colors.tailorBlack} size={34} />
                     </Pressable>
                     <TailorIcon />
@@ -58,13 +81,17 @@ export const CreateNewRestaurant: FC = () => {
                         control={form.control}
                         name="name"
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <Pressable onPress={openSearchModal}>
+                            <Pressable onPress={() => {
+                                if (!isSubmitting) {
+                                    openSearchModal();
+                                }
+                            }}>
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Nombre"
+                                    pointerEvents="none"
                                     onBlur={onBlur}
                                     onChangeText={onChange}
-                                    pointerEvents="none"
                                     value={value}
                                     editable={false}
                                 />
@@ -86,6 +113,7 @@ export const CreateNewRestaurant: FC = () => {
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
+                                editable={!isSubmitting}
                             />
                         )}
                     />
@@ -108,16 +136,26 @@ export const CreateNewRestaurant: FC = () => {
                                 numberOfLines={4}
                                 maxLength={500}
                                 textAlignVertical="top"
+                                editable={!isSubmitting}
                             />
                         )}
                     />
                 </View>
-                <Pressable onPress={submitForm} style={styles.button}>
-                    <TextBase weight="bold" size={16}>
-                        Guardar
-                    </TextBase>
+                <Pressable
+                    onPress={handleSubmit}
+                    style={[styles.button, isSubmitting && styles.disabledButton]}
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? (
+                        <ActivityIndicator size="small" color={colors.tailorBlack} />
+                    ) : (
+                        <TextBase weight="bold" size={16}>
+                            Guardar
+                        </TextBase>
+                    )}
                 </Pressable>
             </View>
+            {/* Bottom Sheet Modal para búsqueda */}
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 index={0}
@@ -125,9 +163,9 @@ export const CreateNewRestaurant: FC = () => {
                 keyboardBehavior="extend"
                 enableDynamicSizing={false}
                 backgroundStyle={styles.bottomSheetBackground}
-                backdropComponent={
-                    (props) => <CustomBackdrop {...props} onPress={closeSearchModal} />
-                }
+                backdropComponent={(props) => (
+                    <CustomBackdrop {...props} onPress={closeSearchModal} />
+                )}
             >
                 <BottomSheetView style={styles.sheetContent}>
                     <TextBase weight="bold" size={24} color="tailorBlack">
@@ -211,6 +249,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    disabledButton: {
+        opacity: 0.6,
+    },
     bottomSheetBackground: {
         backgroundColor: '#fff',
     },
@@ -233,6 +274,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         fontSize: 16,
+        flex: 1,
     },
     searchResult: {
         gap: 4,

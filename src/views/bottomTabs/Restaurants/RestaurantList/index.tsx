@@ -1,13 +1,14 @@
 import { StyleSheet, FlatList } from 'react-native';
 import React, { FC, memo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RestaurantsNavigationProp } from '@/core/navigation/types';
+import { MainStackParamList } from '@/core/navigation/types';
 import RestaurantItem from '../../components/RestaurantItem';
 import { MOCK_RESTAURANTS } from '@/features/restaurants/mock';
 import { Restaurant } from '@/features/restaurants/models';
+import { NavigationProp } from '@react-navigation/native';
 
 type Props = {
-    navigation: RestaurantsNavigationProp;
+    navigation: NavigationProp<MainStackParamList>;
 };
 
 const RestaurantList: FC<Props> = ({ navigation }) => {
