@@ -15,12 +15,12 @@ const ReviewList: FC<Props> = ({ reviews }) => {
         <View key={index}>
             <View style={styles.titleRow}>
                 <TextBase weight="bold" size={16}>
-                    {review.name}
+                    {review.owner}
                 </TextBase>
                 <RatingStars rating={review.rating} />
             </View>
             <TextBase size={16}>
-                {review.comments}
+                {review.comment}
             </TextBase>
             {index !== reviews.length - 1 && <View style={styles.separator} />}
         </View>

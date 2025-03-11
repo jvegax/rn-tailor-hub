@@ -1,14 +1,14 @@
 export interface Restaurant {
-    id: number;
+    id: string;
     name: string;
-    neighborhood: string;
-    photograph: string;
+    owner: string;
     address: string;
     latlng: LatLng;
     image: string;
-    cuisine_type: string;
-    operating_hours: OperatingHours;
     reviews: Review[];
+    createdAt: string;
+    updatedAt: string;
+    avgRating: number;
 }
 
 export interface LatLng {
@@ -16,13 +16,10 @@ export interface LatLng {
     lng: number;
 }
 
-export type OperatingHours = {
-    [day: string]: string;
-};
-
 export interface Review {
-    name: string;
-    date: string;
+    id: string;
+    owner: string;
     rating: number;
-    comments: string;
+    comment: string;
+    date: string;
 }

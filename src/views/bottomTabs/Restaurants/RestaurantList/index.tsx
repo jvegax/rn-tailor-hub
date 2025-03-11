@@ -3,7 +3,6 @@ import React, { FC, memo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MainStackParamList } from '@/core/navigation/types';
 import RestaurantItem from '../../components/RestaurantItem';
-import { MOCK_RESTAURANTS } from '@/features/restaurants/mock';
 import { Restaurant } from '@/features/restaurants/models';
 import { NavigationProp } from '@react-navigation/native';
 
@@ -15,7 +14,7 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
     const insets = useSafeAreaInsets();
 
     const navigateRestaurantDetails = useCallback(
-        (id: number) => navigation.navigate('RestaurantDetails', { id }),
+        (id: string) => navigation.navigate('RestaurantDetails', { id }),
         [navigation]
     );
 
@@ -28,7 +27,7 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
 
     return (
         <FlatList
-            data={MOCK_RESTAURANTS}
+            data={[]}
             renderItem={renderRestaurantItem}
             contentContainerStyle={[
                 styles.container,

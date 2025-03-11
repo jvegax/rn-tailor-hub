@@ -1,7 +1,6 @@
 import React, { FC, memo, useRef } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
-import { MOCK_RESTAURANTS } from '@/features/restaurants/mock';
 import { Restaurant } from '@/features/restaurants/models';
 import RestaurantItem from './RestaurantItem';
 
@@ -41,7 +40,7 @@ const RestaurantMap: FC = () => {
                 </MapView>
                 <View style={styles.cardsContainer}>
                     <FlatList
-                        data={MOCK_RESTAURANTS}
+                        data={[]}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={renderCard}
                         horizontal

@@ -4,7 +4,7 @@ import { NetworkData } from '@/common/domain/NetworkData/types';
 import { Restaurant } from '../../models';
 import { useMemo } from 'react';
 
-export const useGetRestaurantById = (id: number): NetworkData<Restaurant> => {
+export const useGetRestaurantById = (id: string): NetworkData<Restaurant> => {
     const {
         data,
         isLoading,

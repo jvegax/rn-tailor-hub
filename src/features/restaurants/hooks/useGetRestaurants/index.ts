@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { NetworkData } from '@/common/domain/NetworkData/types';
 import { useMemo } from 'react';
-import { getRestaurants, GetRestaurantsResponse } from '../../data/getRestaurants';
+import { getRestaurants } from '../../data/getRestaurants';
+import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
+import { Restaurant } from '../../models';
 
 type Props = {
     page: number;
@@ -11,27 +13,30 @@ type Props = {
 export const useGetRestaurants = ({
     page,
     limit,
-}: Props): NetworkData<GetRestaurantsResponse> => {
+}: Props) => {
+    const fetchWithAuth = useAuthFetch();
     const { data, isLoading, isError } = useQuery({
         queryKey: ['getRestaurants', page, limit],
-        queryFn: () => getRestaurants({ page, limit }),
+        queryFn: () => getRestaurants({ page, limit, fetchWithAuth }),
     });
 
     const networkData = useMemo(() => {
         if (isLoading) {
-            const loading: NetworkData<GetRestaurantsResponse> = { type: 'loading' };
+            const loading: NetworkData<Restaurant> = {
+                type: 'loading',
+            };
             return loading;
         }
 
         if (isError || !data) {
-            const error: NetworkData<GetRestaurantsResponse> = {
+            const error: NetworkData<Restaurant> = {
                 type: 'error',
                 message: 'Error al obtener los restaurantes',
             };
             return error;
         }
 
-        const restaurantData: NetworkData<GetRestaurantsResponse> = {
+        const restaurantData: NetworkData<Restaurant> = {
             type: 'data',
             data,
         };

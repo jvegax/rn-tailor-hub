@@ -1,6 +1,4 @@
-import { Restaurant } from '../models';
-
-export const MOCK_RESTAURANTS: Restaurant[] = [{
+export const MOCK_RESTAURANTS = [{
     'id': 1,
     'name': 'Mission Chinese Food',
     'neighborhood': 'Manhattan',
