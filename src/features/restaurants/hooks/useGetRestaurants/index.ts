@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { NetworkData } from '@/common/domain/NetworkData/types';
+import type { NetworkData } from '@/common/domain/NetworkData/types';
 import { useMemo } from 'react';
 import { getRestaurants } from '../../data/getRestaurants';
 import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
-import { Restaurant } from '../../models';
+import { Restaurant } from '@/features/restaurants/models';
 
 type Props = {
     page: number;
@@ -15,33 +15,23 @@ export const useGetRestaurants = ({
     limit,
 }: Props) => {
     const fetchWithAuth = useAuthFetch();
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError, refetch, isRefetchError, isRefetching } = useQuery<Restaurant[]>({
         queryKey: ['getRestaurants', page, limit],
         queryFn: () => getRestaurants({ page, limit, fetchWithAuth }),
     });
 
-    const networkData = useMemo(() => {
-        if (isLoading) {
-            const loading: NetworkData<Restaurant> = {
-                type: 'loading',
-            };
-            return loading;
+    const networkData = useMemo<NetworkData<Restaurant[]>>(() => {
+        if (isLoading || isRefetching) {
+            return { type: 'loading' };
         }
 
-        if (isError || !data) {
-            const error: NetworkData<Restaurant> = {
-                type: 'error',
-                message: 'Error al obtener los restaurantes',
-            };
-            return error;
+        if (isError || !data || isRefetchError) {
+            console.log('Error al obtener los restaurantes', { isError, data, isRefetchError });
+            return { type: 'error', message: 'Error al obtener los restaurantes' };
         }
 
-        const restaurantData: NetworkData<Restaurant> = {
-            type: 'data',
-            data,
-        };
-        return restaurantData;
-    }, [data, isLoading, isError]);
+        return { type: 'data', data };
+    }, [data, isLoading, isError, isRefetchError, isRefetching]);
 
-    return networkData;
+    return { data: networkData, refetch };
 };
