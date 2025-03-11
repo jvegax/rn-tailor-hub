@@ -1,10 +1,12 @@
-import React, { FC, memo, useCallback, useMemo, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput, FlatList, Keyboard } from 'react-native';
+/* eslint-disable react/no-unstable-nested-components */
+import React, { FC, memo } from 'react';
+import { View, StyleSheet, Pressable, FlatList, TextInput } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
     BottomSheetModal,
     BottomSheetModalProvider,
+    BottomSheetTextInput,
     BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import TextBase from '@/common/components/TextBase';
@@ -14,56 +16,30 @@ import ImageInput from './ImageInput';
 import { useRestaurantForm } from './form';
 import { colors } from '@/common/theme/colors';
 import { useNavigation } from '@react-navigation/native';
-import { SearchRestaurantResult } from '@/features/places/models';
-import { searchPlaces } from '@/features/places/data/searchPlaces';
 import CustomBackdrop from '@/common/components/CustomBackdrop';
+import { usePlacesBottomSheet } from './bottom-sheet';
+import SearchIcon from '@/assets/icons/SearchIcon';
 
 export const CreateNewRestaurant: FC = () => {
     const { top } = useSafeAreaInsets();
     const { form, submitForm } = useRestaurantForm();
+    const bottomSheetModal = usePlacesBottomSheet({ form });
+    const {
+        bottomSheetModalRef,
+        snapPoints,
+        searchQuery,
+        searchResults,
+        openSearchModal,
+        closeSearchModal,
+        handleSearch,
+        handleSelectResult,
+    } = bottomSheetModal;
     const imageValue = form.watch('image');
     const navigation = useNavigation();
-
-    // Bottom Sheet para búsqueda
-    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const snapPoints = useMemo(() => ['50%'], []);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<SearchRestaurantResult[]>([]);
-
-    const openSearchModal = useCallback(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
-
-    const closeSearchModal = useCallback(() => {
-        bottomSheetModalRef.current?.close();
-    }, []);
-
-    const handleSearch = async (query: string) => {
-        setSearchQuery(query);
-        if (query.trim().length > 0) {
-            try {
-                const results = await searchPlaces(query);
-                setSearchResults(results.slice(0, 10));
-            } catch (error) {
-                console.error('Error en la búsqueda:', error);
-            }
-        } else {
-            setSearchResults([]);
-        }
-    };
-
-    const handleSelectResult = useCallback((result: SearchRestaurantResult) => {
-        form.setValue('name', result.name);
-        form.setValue('address', result.address);
-        form.setValue('latlng', { lat: result.latlng.lat, lng: result.latlng.lng });
-        closeSearchModal();
-        Keyboard.dismiss();
-    }, [closeSearchModal, form]);
 
     return (
         <BottomSheetModalProvider>
             <View style={[styles.container, { paddingTop: top }]}>
-                {/* Header */}
                 <View style={styles.header}>
                     <Pressable style={styles.goBackContainer} onPress={() => navigation.goBack()} hitSlop={32}>
                         <GoBackIcon color={colors.tailorBlack} size={34} />
@@ -74,7 +50,6 @@ export const CreateNewRestaurant: FC = () => {
                     value={imageValue}
                     onChange={(uri) => form.setValue('image', uri)}
                 />
-                {/* Campo Nombre: pulsar abre el bottom sheet */}
                 <View style={styles.fieldContainer}>
                     <TextBase weight="bold" size={24}>
                         Nombre
@@ -91,13 +66,12 @@ export const CreateNewRestaurant: FC = () => {
                                     onChangeText={onChange}
                                     pointerEvents="none"
                                     value={value}
-                                    editable={false} // Deshabilitamos la edición directa
+                                    editable={false}
                                 />
                             </Pressable>
                         )}
                     />
                 </View>
-                {/* Campo Dirección */}
                 <View style={styles.fieldContainer}>
                     <TextBase weight="bold" size={24}>
                         Dirección
@@ -116,7 +90,6 @@ export const CreateNewRestaurant: FC = () => {
                         )}
                     />
                 </View>
-                {/* Campo Descripción */}
                 <View style={styles.fieldContainer}>
                     <TextBase weight="bold" size={24}>
                         Descripción
@@ -145,22 +118,31 @@ export const CreateNewRestaurant: FC = () => {
                     </TextBase>
                 </Pressable>
             </View>
-            {/* Bottom Sheet Modal para búsqueda */}
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 index={0}
                 snapPoints={snapPoints}
+                keyboardBehavior="extend"
                 enableDynamicSizing={false}
                 backgroundStyle={styles.bottomSheetBackground}
-                backdropComponent={(props) => <CustomBackdrop {...props} onPress={closeSearchModal} />}
+                backdropComponent={
+                    (props) => <CustomBackdrop {...props} onPress={closeSearchModal} />
+                }
             >
                 <BottomSheetView style={styles.sheetContent}>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Buscar restaurante..."
-                        onChangeText={handleSearch}
-                        value={searchQuery}
-                    />
+                    <TextBase weight="bold" size={24} color="tailorBlack">
+                        Buscar restaurante
+                    </TextBase>
+                    <View style={styles.searchBarContainer}>
+                        <SearchIcon />
+                        <BottomSheetTextInput
+                            style={styles.searchInput}
+                            placeholder="Buscar restaurante..."
+                            onChangeText={handleSearch}
+                            value={searchQuery}
+                            autoFocus
+                        />
+                    </View>
                     <FlatList
                         data={searchResults}
                         keyExtractor={(item, index) => index.toString()}
@@ -236,14 +218,21 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
     },
-    searchInput: {
+    searchBarContainer: {
         width: '100%',
-        borderWidth: 1,
-        borderColor: colors.tailorBlack,
-        borderRadius: 24,
-        padding: 12,
-        fontSize: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.tailorGray,
+        borderRadius: 8,
+        justifyContent: 'flex-start',
+        gap: 8,
         marginBottom: 16,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        marginTop: 8,
+    },
+    searchInput: {
+        fontSize: 16,
     },
     searchResult: {
         paddingVertical: 12,

@@ -15,7 +15,7 @@ const CustomBackdrop: FC<Props> = ({ onPress, style }) => {
 const styles = StyleSheet.create({
     backdrop: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
 });
 

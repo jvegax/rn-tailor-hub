@@ -1,10 +1,7 @@
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createRestaurantSchema } from './schema';
-import { z } from 'zod';
+import { CreateRestaurantFormData, createRestaurantSchema } from './schema';
 import { Platform } from 'react-native';
-
-export type CreateRestaurantFormData = z.infer<typeof createRestaurantSchema>;
 
 export const useRestaurantForm = () => {
     const form = useForm<CreateRestaurantFormData>({
@@ -67,3 +64,5 @@ export const useRestaurantForm = () => {
         submitForm: onSubmit,
     };
 };
+
+export type RestaurantForm = UseFormReturn<CreateRestaurantFormData>;

@@ -48,11 +48,6 @@ const RestaurantsStackNavigator: FC = () => {
                 component={Restaurants}
                 options={{ headerShown: false }}
             />
-            <RestaurantsStack.Screen
-                name="RestaurantDetails"
-                component={RestaurantDetails}
-                options={{ headerShown: false }}
-            />
         </RestaurantsStack.Navigator>
     );
 };
@@ -115,6 +110,11 @@ const MainStackNavigator: FC = () => {
             <MainStack.Screen
                 name="CreateNewRestaurant"
                 component={CreateNewRestaurant}
+                options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+                name="RestaurantDetails"
+                component={RestaurantDetails}
                 options={{ headerShown: false }}
             />
         </MainStack.Navigator>

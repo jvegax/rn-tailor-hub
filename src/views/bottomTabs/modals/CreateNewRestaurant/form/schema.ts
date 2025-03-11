@@ -14,3 +14,5 @@ export const createRestaurantSchema = z.object({
         message: 'La descripción debe tener mínimo 10 caracteres',
     }),
 });
+
+export type CreateRestaurantFormData = z.infer<typeof createRestaurantSchema>;
