@@ -1,5 +1,5 @@
 import NetworkData from '@/common/domain/NetworkData';
-import { MainTabParamList } from '@/core/navigation/types';
+import { RestaurantsStackParamList } from '@/core/navigation/types';
 import { useGetRestaurantById } from '@/features/restaurants/hooks/useGetRestaurantById';
 import { Restaurant } from '@/features/restaurants/models';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import ReviewForm from './ReviewForm';
 import { ScrollView } from 'react-native-gesture-handler';
 import ReviewList from './ReviewList';
 
-type RestaurantDetailsRouteProp = RouteProp<MainTabParamList, 'RestaurantDetails'>;
+type RestaurantDetailsRouteProp = RouteProp<RestaurantsStackParamList, 'RestaurantDetails'>;
 
 export const RestaurantDetails: FC = () => {
     const navigation = useNavigation();
@@ -21,7 +21,10 @@ export const RestaurantDetails: FC = () => {
     const networkData = useGetRestaurantById(params.id);
 
     const renderRestaurantDetails = useCallback((data: Restaurant) => (
-        <ScrollView style={[styles.container, { paddingTop: top }]}>
+        <ScrollView
+            style={[styles.container, { paddingTop: top }]}
+            showsVerticalScrollIndicator={false}
+        >
             <Header restaurant={data} goBack={navigation.goBack} />
             <View style={styles.descriptionContainer}>
                 <TextBase size={16} style={styles.descriptionText}>

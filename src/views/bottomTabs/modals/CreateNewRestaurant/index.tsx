@@ -151,7 +151,7 @@ export const CreateNewRestaurant: FC = () => {
                                 <TextBase weight="bold" size={16} color="tailorBlack">
                                     {item.name}
                                 </TextBase>
-                                <TextBase size={14} color="tailorGray">
+                                <TextBase size={14} color="tailorGrayIcon">
                                     {item.address}
                                 </TextBase>
                             </Pressable>
@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     searchResult: {
+        gap: 4,
         paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: colors.tailorGray,
