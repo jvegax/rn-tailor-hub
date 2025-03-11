@@ -77,7 +77,7 @@ export async function logout(): Promise<void> {
         await fetch(`${API_URL}/auth/logout`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `${token}`,
                 'Cookie': `refreshToken=${refreshTokenValue}`,
             },
             credentials: 'include',
@@ -91,7 +91,16 @@ export async function logout(): Promise<void> {
 }
 
 
-export async function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+type AuthFetchProps = {
+    url: string;
+    options: RequestInit;
+    logoutHandler: () => void;
+};
+export async function authFetch({
+    url,
+    options,
+    logoutHandler,
+}: AuthFetchProps): Promise<Response> {
     const token = storage.getString('authToken');
     const headers = options.headers ? new Headers(options.headers) : new Headers();
     if (token) {
@@ -108,8 +117,7 @@ export async function authFetch(url: string, options: RequestInit = {}): Promise
             options.headers = headers;
             response = await fetch(url, options);
         } else {
-            await logout();
-            throw new Error('Token expirado. Usuario desconectado.');
+            logoutHandler();
         }
     }
 

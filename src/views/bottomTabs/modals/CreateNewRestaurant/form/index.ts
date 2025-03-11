@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateRestaurantFormData, createRestaurantSchema } from './schema';
 import { Platform } from 'react-native';
 import { defaultRestaurantValues } from './mock';
-import { authFetch } from '@/features/auth';
 import { Props, RestaurantForm } from './types';
+import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
 
 const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
@@ -12,6 +12,7 @@ export const useRestaurantForm = ({ navigation }: Props): {
     form: RestaurantForm
     submitForm: () => Promise<any>
 } => {
+    const fetchWithAuth = useAuthFetch();
     const form = useForm<CreateRestaurantFormData>({
         resolver: zodResolver(createRestaurantSchema),
         defaultValues: defaultRestaurantValues,
@@ -41,10 +42,12 @@ export const useRestaurantForm = ({ navigation }: Props): {
             formData.append('latlng[lat]', data.latlng.lat.toString());
             formData.append('latlng[lng]', data.latlng.lng.toString());
 
-            const response = await authFetch(`${API_URL}/restaurant/create`, {
+            const url = `${API_URL}/restaurant/create`;
+            const options: RequestInit = {
                 method: 'POST',
                 body: formData,
-            });
+            };
+            const response = await fetchWithAuth(url, options);
 
             if (response.status !== 201) {
                 navigation.navigate('CreateRestaurantResultScreen', { status: 'error' });

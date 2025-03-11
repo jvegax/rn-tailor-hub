@@ -23,13 +23,11 @@ import { useAuth } from '../providers/auth';
 import CustomDrawerContent from '@/common/components/CustomDrawerContent';
 import { CreateRestaurantResultScreen } from '@/common/components/CreateRestaurantResultScreen';
 
-// Creación de navigators
 const AuthStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
 
-// ---------- AUTH STACK (independiente) ----------
 const AuthStackNavigator: FC = () => {
     return (
         <AuthStack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -39,7 +37,6 @@ const AuthStackNavigator: FC = () => {
     );
 };
 
-// ---------- BOTTOM TABS (para el MainStack) ----------
 const MainTabNavigator: FC = () => {
     return (
         <>
@@ -85,7 +82,6 @@ const MainTabNavigator: FC = () => {
     );
 };
 
-// ---------- MAIN STACK (envuelve BottomTabs y modales) ----------
 const MainStackNavigator: FC = () => {
     return (
         <MainStack.Navigator>
@@ -113,7 +109,6 @@ const MainStackNavigator: FC = () => {
     );
 };
 
-// ---------- APP NAVIGATOR ----------
 export const AppNavigator: FC = () => {
     const { authData } = useAuth();
 

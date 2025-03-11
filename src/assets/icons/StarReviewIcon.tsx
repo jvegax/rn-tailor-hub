@@ -30,7 +30,12 @@ const StarReviewIcon: React.FC<StarReviewIconProps> = ({
         >
             <Defs>
                 <ClipPath id="starClip">
-                    <Rect x="0" y="0" width={viewBoxWidth * fillPercentage} height={viewBoxHeight} />
+                    <Rect
+                        x="0"
+                        y="0"
+                        width={viewBoxWidth * fillPercentage}
+                        height={viewBoxHeight}
+                    />
                 </ClipPath>
             </Defs>
             <Path
