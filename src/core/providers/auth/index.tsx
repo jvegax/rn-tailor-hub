@@ -1,5 +1,5 @@
 import { storage } from '@/core/cache';
-import { login, logout } from '@/features/auth';
+import { login, logout } from '@/features/auth/data';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 export type AuthData = {

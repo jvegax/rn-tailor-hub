@@ -21,15 +21,13 @@ import UserIcon from '@/assets/icons/UserIcon';
 import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
 import { useAuth } from '../providers/auth';
 import CustomDrawerContent from '@/common/components/CustomDrawerContent';
+import { CreateRestaurantResultScreen } from '@/common/components/CreateRestaurantResultScreen';
 
-// Creación de navigators
 const AuthStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
-const RestaurantsStack = createNativeStackNavigator();
 
-// ---------- AUTH STACK (independiente) ----------
 const AuthStackNavigator: FC = () => {
     return (
         <AuthStack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -39,30 +37,11 @@ const AuthStackNavigator: FC = () => {
     );
 };
 
-// ---------- RESTAURANTS STACK (lista y detalles) ----------
-const RestaurantsStackNavigator: FC = () => {
-    return (
-        <RestaurantsStack.Navigator initialRouteName="Restaurants">
-            <RestaurantsStack.Screen
-                name="Restaurants"
-                component={Restaurants}
-                options={{ headerShown: false }}
-            />
-            <RestaurantsStack.Screen
-                name="RestaurantDetails"
-                component={RestaurantDetails}
-                options={{ headerShown: false }}
-            />
-        </RestaurantsStack.Navigator>
-    );
-};
-
-// ---------- BOTTOM TABS (para el MainStack) ----------
 const MainTabNavigator: FC = () => {
     return (
         <>
             <BottomTabs.Navigator
-                initialRouteName="RestaurantsTab"
+                initialRouteName="Restaurants"
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: false,
@@ -71,8 +50,8 @@ const MainTabNavigator: FC = () => {
                 }}
             >
                 <BottomTabs.Screen
-                    name="RestaurantsTab"
-                    component={RestaurantsStackNavigator}
+                    name="Restaurants"
+                    component={Restaurants}
                     options={{
                         tabBarIcon: ({ color, size }) => (
                             <LocationIcon color={color} width={size} height={size} />
@@ -103,7 +82,6 @@ const MainTabNavigator: FC = () => {
     );
 };
 
-// ---------- MAIN STACK (envuelve BottomTabs y modales) ----------
 const MainStackNavigator: FC = () => {
     return (
         <MainStack.Navigator>
@@ -117,11 +95,20 @@ const MainStackNavigator: FC = () => {
                 component={CreateNewRestaurant}
                 options={{ headerShown: false }}
             />
+            <MainStack.Screen
+                name="RestaurantDetails"
+                component={RestaurantDetails}
+                options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+                name="CreateRestaurantResultScreen"
+                component={CreateRestaurantResultScreen}
+                options={{ headerShown: false }}
+            />
         </MainStack.Navigator>
     );
 };
 
-// ---------- APP NAVIGATOR ----------
 export const AppNavigator: FC = () => {
     const { authData } = useAuth();
 

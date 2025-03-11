@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import { AuthStackParamList } from '@/core/navigation/types';
-import TailorIcon from '@/assets/icons/TailorIcon';
 import { useAuth } from '@/core/providers/auth';
+import TailorLogo from '@/assets/icons/TailorLogo';
 
 export const LoginScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
@@ -20,14 +20,13 @@ export const LoginScreen = () => {
         const success = await login(email, password);
         setIsLoading(false);
         if (!success) {
-            console.error('Error al iniciar sesión');
+            Alert.alert('Hubo un problema al iniciar sesión');
         }
     };
 
     return (
         <View style={styles.container}>
-            <TailorIcon color={colors.tailorBlue} />
-            {/* Formulario */}
+            <TailorLogo color={colors.tailorBlue} />
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
                     Email
@@ -85,8 +84,6 @@ export const LoginScreen = () => {
         </View>
     );
 };
-
-export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {

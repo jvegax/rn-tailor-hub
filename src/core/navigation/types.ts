@@ -1,9 +1,7 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavigationProp, NavigatorScreenParams } from '@react-navigation/native';
 
 declare global {
     namespace ReactNavigation {
-        // Extendemos el RootParamList globalmente para que React Navigation lo reconozca
         interface RootParamList extends RootStackParamList { }
     }
 }
@@ -14,15 +12,9 @@ export type AuthStackParamList = {
     Register: undefined;
 };
 
-// Stack para la pestaña Restaurants (lista y detalles)
-export type RestaurantsStackParamList = {
-    Restaurants: undefined;
-    RestaurantDetails: { id: number };
-};
-
 // Bottom tabs dentro del MainStack
 export type MainTabParamList = {
-    RestaurantsTab: NavigatorScreenParams<RestaurantsStackParamList>;
+    Restaurants: undefined;
     Favourites: undefined;
     Profile: undefined;
 };
@@ -31,6 +23,8 @@ export type MainTabParamList = {
 export type MainStackParamList = {
     MainTabs: NavigatorScreenParams<MainTabParamList>;
     CreateNewRestaurant: undefined;
+    RestaurantDetails: { id: number };
+    CreateRestaurantResultScreen: { status: 'success' | 'error' };
 };
 
 // Drawer que contiene el MainStack (solo para el flujo principal)
@@ -44,5 +38,4 @@ export type RootStackParamList = {
     Main: NavigatorScreenParams<MainStackParamList>;
 };
 
-// Para facilitar el tipado de la navegación dentro del RestaurantsStack
-export type RestaurantsNavigationProp = NativeStackNavigationProp<RestaurantsStackParamList, 'Restaurants'>;
+export type MainTabNavigationProp = NavigationProp<MainTabParamList>;

@@ -6,15 +6,16 @@ import { colors } from '@/common/theme/colors';
 import RestaurantItem from '../components/RestaurantItem';
 import { useFavorites } from '@/core/providers/favourites';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { MainStackParamList } from '@/core/navigation/types';
 
 export const Favourites = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
     const { bottom, top } = useSafeAreaInsets();
     const { favorites } = useFavorites();
 
     const navigateRestaurantDetails = useCallback(
-        (id: number) => navigation.navigate('Main', { screen: 'RestaurantDetails', params: { id } }),
+        (id: number) => navigation.navigate('RestaurantDetails', { id }),
         [navigation]
     );
 

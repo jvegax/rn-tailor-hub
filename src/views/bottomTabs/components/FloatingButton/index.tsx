@@ -2,11 +2,11 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainTabParamList } from '@/core/navigation/types';
+import { MainStackParamList } from '@/core/navigation/types';
 import { colors } from '@/common/theme/colors';
 
 const FloatingButton: React.FC = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<MainTabParamList>>();
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
     const handlePress = () => {
         navigation.navigate('CreateNewRestaurant');

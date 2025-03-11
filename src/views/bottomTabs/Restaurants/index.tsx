@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { DrawerActions, NavigationProp, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RestaurantsNavigationProp } from '@/core/navigation/types';
+import { MainStackParamList } from '@/core/navigation/types';
 import MapsIcon from '@/assets/icons/MapsIcon';
 import DrawerIcon from '@/assets/icons/DrawerIcon';
 import { colors } from '@/common/theme/colors';
@@ -12,7 +12,7 @@ import TextBase from '@/common/components/TextBase';
 
 export const Restaurants = () => {
     const { top } = useSafeAreaInsets();
-    const navigation = useNavigation<RestaurantsNavigationProp>();
+    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
     const [isMapMode, setIsMapMode] = useState(false);
     const handleToggleMap = () => setIsMapMode((prev) => !prev);
     const openDrawer = () => navigation.dispatch(DrawerActions.openDrawer());
