@@ -5,8 +5,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import { AuthStackParamList } from '@/core/navigation/types';
-import TailorIcon from '@/assets/icons/TailorIcon';
 import { useAuth } from '@/core/providers/auth';
+import TailorLogo from '@/assets/icons/TailorLogo';
 
 export const LoginScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
@@ -26,7 +26,7 @@ export const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
-            <TailorIcon color={colors.tailorBlue} />
+            <TailorLogo color={colors.tailorBlue} />
             <View style={styles.form}>
                 <TextBase weight="bold" color="tailorWhite">
                     Email

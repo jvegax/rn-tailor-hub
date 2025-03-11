@@ -37,6 +37,9 @@ export const useRestaurantForm = (): {
             formData.append('name', data.name);
             formData.append('address', data.address);
             formData.append('description', data.description);
+            formData.append('latlng[lat]', data.latlng.lat);
+            formData.append('latlng[lng]', data.latlng.lng);
+
 
             const token = storage.getString('authToken') || '';
             const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
@@ -44,7 +47,7 @@ export const useRestaurantForm = (): {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `${token}`,
                 },
             });
 
