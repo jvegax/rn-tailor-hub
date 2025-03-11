@@ -28,8 +28,9 @@ import SearchIcon from '@/assets/icons/SearchIcon';
 import { MainStackParamList } from '@/core/navigation/types';
 
 export const CreateNewRestaurant: FC = () => {
+    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
     const { top } = useSafeAreaInsets();
-    const { form, submitForm } = useRestaurantForm();
+    const { form, submitForm } = useRestaurantForm({ navigation });
     const { isSubmitting } = form.formState;
     const bottomSheetModal = usePlacesBottomSheet({ form });
     const {
@@ -43,12 +44,11 @@ export const CreateNewRestaurant: FC = () => {
         handleSelectResult,
     } = bottomSheetModal;
     const imageValue = form.watch('image');
-    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
 
     const handleSubmit = async () => {
         try {
             const result = await submitForm();
-            if (result && result.id) {
+            if (result) {
                 navigation.navigate('RestaurantDetails', { id: result.id });
             }
         } catch (error) {

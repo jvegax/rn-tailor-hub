@@ -1,11 +1,11 @@
 import { storage } from '@/core/cache';
 
-const API_BASE_URL = 'https://technical-review-api-tailor.netlify.app/api';
+const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
 type LoginResponse = { token: string; refreshToken: string } | null;
 export async function login(email: string, password: string): Promise<LoginResponse> {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export async function login(email: string, password: string): Promise<LoginRespo
 
 export async function refreshToken(): Promise<string | null> {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+        const response = await fetch(`${API_URL}/auth/refresh-token`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -74,7 +74,7 @@ export async function logout(): Promise<void> {
     try {
         const token = storage.getString('authToken') ?? '';
         const refreshTokenValue = storage.getString('refreshToken') ?? '';
-        await fetch(`${API_BASE_URL}/auth/logout`, {
+        await fetch(`${API_URL}/auth/logout`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

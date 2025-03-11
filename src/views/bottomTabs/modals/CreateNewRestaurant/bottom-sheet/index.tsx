@@ -1,9 +1,9 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { RestaurantForm } from '../form';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { SearchRestaurantResult } from '@/features/places/models';
 import { searchPlaces } from '@/features/places/data/searchPlaces';
 import { Keyboard } from 'react-native';
+import { RestaurantForm } from '../form/types';
 
 type Props = { form: RestaurantForm };
 

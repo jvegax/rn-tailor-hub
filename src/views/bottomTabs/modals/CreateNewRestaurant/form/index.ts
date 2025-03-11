@@ -1,15 +1,16 @@
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateRestaurantFormData, createRestaurantSchema } from './schema';
-import { Platform, Alert } from 'react-native';
+import { Platform } from 'react-native';
 import { defaultRestaurantValues } from './mock';
-import { storage } from '@/core/cache';
+import { authFetch } from '@/features/auth';
+import { Props, RestaurantForm } from './types';
 
-export type RestaurantForm = UseFormReturn<CreateRestaurantFormData>;
+const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
-export const useRestaurantForm = (): {
-    form: RestaurantForm;
-    submitForm: () => Promise<any>;
+export const useRestaurantForm = ({ navigation }: Props): {
+    form: RestaurantForm
+    submitForm: () => Promise<any>
 } => {
     const form = useForm<CreateRestaurantFormData>({
         resolver: zodResolver(createRestaurantSchema),
@@ -24,8 +25,8 @@ export const useRestaurantForm = (): {
                 const filename = data.image.split('/').pop() || 'image.jpg';
                 const match = /\.(\w+)$/.exec(filename);
                 const type = match ? `image/${match[1].toLowerCase()}` : 'image';
-
-                const normalizedUri = Platform.OS === 'ios' ? data.image.replace('file://', '') : data.image;
+                const normalizedUri =
+                    Platform.OS === 'ios' ? data.image.replace('file://', '') : data.image;
 
                 formData.append('image', {
                     uri: normalizedUri,
@@ -37,31 +38,21 @@ export const useRestaurantForm = (): {
             formData.append('name', data.name);
             formData.append('address', data.address);
             formData.append('description', data.description);
-            formData.append('latlng[lat]', data.latlng.lat);
-            formData.append('latlng[lng]', data.latlng.lng);
+            formData.append('latlng[lat]', data.latlng.lat.toString());
+            formData.append('latlng[lng]', data.latlng.lng.toString());
 
-
-            const token = storage.getString('authToken') || '';
-            const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
-            const response = await fetch(`${API_URL}/restaurant/create`, {
+            const response = await authFetch(`${API_URL}/restaurant/create`, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Authorization': `${token}`,
-                },
             });
 
             if (response.status !== 201) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error al crear el restaurante');
+                navigation.navigate('CreateRestaurantResultScreen', { status: 'error' });
             }
 
-            // Supongamos que la respuesta incluye el id del restaurante creado
-            const result = await response.json().catch(() => ({}));
-            return result;
-        } catch (error) {
-            Alert.alert('Error al crear el restaurante');
-            throw error;
+            navigation.navigate('CreateRestaurantResultScreen', { status: 'success' });
+        } catch (error: any) {
+            navigation.navigate('CreateRestaurantResultScreen', { status: 'error' });
         }
     });
 
