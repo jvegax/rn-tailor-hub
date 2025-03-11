@@ -3,8 +3,8 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import TailorIcon from '@/assets/icons/TailorIcon';
 import { colors } from '@/common/theme/colors';
 import TextBase from '../TextBase';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { MainStackParamList, MainTabNavigationProp } from '@/core/navigation/types';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { MainStackParamList } from '@/core/navigation/types';
 
 type CreateRestaurantResultScreenRouteProp = RouteProp<
     MainStackParamList,
@@ -12,7 +12,7 @@ type CreateRestaurantResultScreenRouteProp = RouteProp<
 >;
 
 export const CreateRestaurantResultScreen = () => {
-    const navigation = useNavigation<MainTabNavigationProp>();
+    const navigation = useNavigation<NavigationProp<MainStackParamList>>();
     const route = useRoute<CreateRestaurantResultScreenRouteProp>();
     const { status } = route.params;
 
@@ -21,7 +21,7 @@ export const CreateRestaurantResultScreen = () => {
             return {
                 message: 'Restaurante guardado',
                 btnText: 'Ver restaurantes',
-                onPressBtn: () => navigation.navigate('Restaurants'),
+                onPressBtn: () => navigation.navigate('MainTabs', { screen: 'Restaurants' }),
             };
         }
         return {

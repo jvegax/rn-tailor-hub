@@ -12,11 +12,6 @@ export type AuthStackParamList = {
     Register: undefined;
 };
 
-// Stack para la pestaña Restaurants (lista y detalles)
-export type RestaurantsStackParamList = {
-    Restaurants: undefined;
-};
-
 // Bottom tabs dentro del MainStack
 export type MainTabParamList = {
     Restaurants: undefined;
