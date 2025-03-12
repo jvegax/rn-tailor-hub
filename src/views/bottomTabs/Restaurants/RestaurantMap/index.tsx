@@ -4,7 +4,7 @@ import MapView, { Marker, Callout, Region } from 'react-native-maps';
 import { Restaurant } from '@/features/restaurants/models';
 import RestaurantItem from './RestaurantItem';
 import { useGetRestaurants } from '@/features/restaurants/hooks/useGetRestaurants';
-import NetworkData from '@/common/domain/NetworkData';
+import NetworkData from '@/common/components/NetworkData';
 import MapMarkerIcon from '@/assets/icons/MapMarkerIcon';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';

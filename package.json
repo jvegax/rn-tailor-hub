@@ -9,7 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "prepare": "husky",
-    "sc": "npx react-native start --reset-cache"
+    "sc": "npx react-native start --reset-cache",
+    "maestro": "maestro test e2e/flow.yml"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.2",

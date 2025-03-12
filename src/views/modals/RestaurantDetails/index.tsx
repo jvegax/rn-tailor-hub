@@ -1,4 +1,4 @@
-import NetworkData from '@/common/domain/NetworkData';
+import NetworkData from '@/common/components/NetworkData';
 import { MainStackNavigationProp, MainStackParamList } from '@/core/navigation/types';
 import { useGetRestaurantById } from '@/features/restaurants/hooks/useGetRestaurantById';
 import { Restaurant } from '@/features/restaurants/models';

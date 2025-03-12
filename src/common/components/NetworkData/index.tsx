@@ -1,7 +1,7 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import type { Props } from './types';
 import { colors } from '@/common/theme/colors';
 import ErrorScreen from '@/common/components/ErrorScreen';
+import { Props } from './types';
 
 const NetworkData = <T,>({ data, renderData, renderNetworkError }: Props<T>) => {
     if (data.type === 'loading') {

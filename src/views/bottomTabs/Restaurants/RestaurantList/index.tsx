@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Restaurant } from '@/features/restaurants/models';
 import { Props } from './types';
 import { useGetRestaurants } from '@/features/restaurants/hooks/useGetRestaurants';
-import NetworkData from '@/common/domain/NetworkData';
+import NetworkData from '@/common/components/NetworkData';
 import ErrorScreen from '@/common/components/ErrorScreen';
 import { colors } from '@/common/theme/colors';
 import RestaurantItem from '../../components/RestaurantItem';
