@@ -1,5 +1,6 @@
 import { storage } from '@/core/cache';
 import { login, logout } from '@/features/auth/data';
+import { User } from '@/features/auth/models';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 export type AuthData = {
@@ -9,6 +10,7 @@ export type AuthData = {
 
 type AuthContextType = {
     authData: AuthData | null;
+    userData: User | null;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
 };
@@ -17,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [authData, setAuthData] = useState<AuthData | null>(null);
+    const [userData, setUserData] = useState<User | null>(null);
 
     useEffect(() => {
         const token = storage.getString('authToken');
@@ -29,7 +32,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const loginHandler = async (email: string, password: string): Promise<boolean> => {
         const result = await login(email, password);
         if (result) {
-            setAuthData(result);
+            setAuthData({ token: result.token, refreshToken: result.refreshToken });
+            setUserData(result.userData);
             return true;
         }
         return false;
@@ -38,10 +42,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const logoutHandler = async () => {
         await logout();
         setAuthData(null);
+        setUserData(null);
     };
 
     return (
-        <AuthContext.Provider value={{ authData, login: loginHandler, logout: logoutHandler }}>
+        <AuthContext.Provider value={{ authData, login: loginHandler, logout: logoutHandler, userData }}>
             {children}
         </AuthContext.Provider>
     );
