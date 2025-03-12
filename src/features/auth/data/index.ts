@@ -1,8 +1,9 @@
 import { storage } from '@/core/cache';
+import { User } from '../models';
 
 const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
-type LoginResponse = { token: string; refreshToken: string } | null;
+type LoginResponse = { token: string; refreshToken: string, userData: User } | null;
 export async function login(email: string, password: string): Promise<LoginResponse> {
     try {
         const response = await fetch(`${API_URL}/auth/login`, {
@@ -32,10 +33,17 @@ export async function login(email: string, password: string): Promise<LoginRespo
             return null;
         }
 
+        const body = await response.json();
+        const userData: User = {
+            id: body._id,
+            email: body.email,
+            name: body.name,
+        };
+        storage.set('userData', JSON.stringify(userData));
         storage.set('authToken', token);
         storage.set('refreshToken', refreshToken);
 
-        return { token, refreshToken };
+        return { token, refreshToken, userData };
     } catch (error) {
         return null;
     }

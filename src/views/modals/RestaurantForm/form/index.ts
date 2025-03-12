@@ -8,31 +8,41 @@ import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
 
 const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
 
-export const useRestaurantForm = ({ navigation }: Props): {
-    form: RestaurantForm
-    submitForm: () => Promise<any>
+export const useRestaurantForm = ({ navigation, restaurant, type }: Props): {
+    form: RestaurantForm;
+    submitForm: () => Promise<any>;
 } => {
     const fetchWithAuth = useAuthFetch();
+
+    const defaultValues = type === 'edit' && restaurant
+        ? {
+            name: restaurant.name,
+            address: restaurant.address,
+            description: restaurant.description,
+            image: restaurant.image,
+            latlng: restaurant.latlng,
+        }
+        : defaultRestaurantValues;
+
     const form = useForm<CreateRestaurantFormData>({
         resolver: zodResolver(createRestaurantSchema),
-        defaultValues: defaultRestaurantValues,
+        defaultValues,
     });
 
     const onSubmit = form.handleSubmit(async (data) => {
         try {
             const formData = new FormData();
-
             if (data.image) {
                 const filename = data.image.split('/').pop() ?? 'image.jpg';
                 const match = /\.(\w+)$/.exec(filename);
-                const type = match ? `image/${match[1].toLowerCase()}` : 'image';
+                const mimeType = match ? `image/${match[1].toLowerCase()}` : 'image';
                 const normalizedUri =
                     Platform.OS === 'ios' ? data.image.replace('file://', '') : data.image;
 
                 formData.append('image', {
                     uri: normalizedUri,
                     name: filename,
-                    type,
+                    type: mimeType,
                 } as any);
             }
 
@@ -42,15 +52,24 @@ export const useRestaurantForm = ({ navigation }: Props): {
             formData.append('latlng[lat]', data.latlng.lat.toString());
             formData.append('latlng[lng]', data.latlng.lng.toString());
 
-            const url = `${API_URL}/restaurant/create`;
+            let url = `${API_URL}/restaurant/create`;
+            let expectedStatus = 201;
+
+            if (type === 'edit') {
+                url = `${API_URL}/restaurant/${restaurant?.id}`;
+                expectedStatus = 202;
+            }
+
             const options: RequestInit = {
-                method: 'POST',
+                method: type === 'edit' ? 'PUT' : 'POST',
                 body: formData,
             };
+
             const response = await fetchWithAuth(url, options);
 
-            if (response.status !== 201) {
+            if (response.status !== expectedStatus) {
                 navigation.navigate('CreateRestaurantResultScreen', { status: 'error' });
+                return;
             }
 
             navigation.navigate('CreateRestaurantResultScreen', { status: 'success' });

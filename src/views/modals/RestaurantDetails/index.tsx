@@ -1,5 +1,5 @@
 import NetworkData from '@/common/domain/NetworkData';
-import { MainStackParamList } from '@/core/navigation/types';
+import { MainStackNavigationProp, MainStackParamList } from '@/core/navigation/types';
 import { useGetRestaurantById } from '@/features/restaurants/hooks/useGetRestaurantById';
 import { Restaurant } from '@/features/restaurants/models';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -15,17 +15,20 @@ import ReviewList from './ReviewList';
 type RestaurantDetailsRouteProp = RouteProp<MainStackParamList, 'RestaurantDetails'>;
 
 export const RestaurantDetails: FC = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<MainStackNavigationProp>();
     const { top } = useSafeAreaInsets();
     const { params } = useRoute<RestaurantDetailsRouteProp>();
     const { data, refetch } = useGetRestaurantById({ id: params.id });
+    const onDeleteSuccess = useCallback(() => {
+        navigation.navigate('MainTabs', { screen: 'Restaurants' });
+    }, [navigation]);
 
     const renderData = useCallback((data: Restaurant) => (
         <ScrollView
             style={[styles.container, { paddingTop: top }]}
             showsVerticalScrollIndicator={false}
         >
-            <Header restaurant={data} goBack={navigation.goBack} />
+            <Header restaurant={data} goBack={navigation.goBack} onDeleteSuccess={onDeleteSuccess} />
             <View style={styles.descriptionContainer}>
                 <TextBase size={16} style={styles.descriptionText}>
                     {data.description}
@@ -34,7 +37,7 @@ export const RestaurantDetails: FC = () => {
             <ReviewForm restaurantId={data.id} refetch={refetch} />
             <ReviewList reviews={data.reviews} />
         </ScrollView>
-    ), [navigation, top, refetch]);
+    ), [navigation, top, refetch, onDeleteSuccess]);
 
     return (
         <NetworkData

@@ -12,7 +12,6 @@ import { LoginScreen } from '@/views/auth/LoginScreen';
 import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
 import { RestaurantDetails } from '@/views/modals/RestaurantDetails';
-import { CreateNewRestaurant } from '@/views/modals/CreateNewRestaurant';
 import { Favourites } from '@/views/bottomTabs/Favourites';
 import { Profile } from '@/views/bottomTabs/Profile';
 import LocationIcon from '@/assets/icons/LocationIcon';
@@ -22,6 +21,7 @@ import FloatingButton from '@/views/bottomTabs/components/FloatingButton';
 import { useAuth } from '../providers/auth';
 import CustomDrawerContent from '@/common/components/CustomDrawerContent';
 import { CreateRestaurantResultScreen } from '@/common/components/CreateRestaurantResultScreen';
+import { RestaurantForm } from '@/views/modals/RestaurantForm';
 
 const AuthStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
@@ -91,8 +91,8 @@ const MainStackNavigator: FC = () => {
                 options={{ headerShown: false }}
             />
             <MainStack.Screen
-                name="CreateNewRestaurant"
-                component={CreateNewRestaurant}
+                name="RestaurantForm"
+                component={RestaurantForm}
                 options={{ headerShown: false }}
             />
             <MainStack.Screen

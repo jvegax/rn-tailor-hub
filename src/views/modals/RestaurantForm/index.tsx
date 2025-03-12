@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import {
     View,
     StyleSheet,
@@ -22,16 +22,24 @@ import GoBackIcon from '@/assets/icons/GoBackIcon';
 import ImageInput from './ImageInput';
 import { useRestaurantForm } from './form';
 import { colors } from '@/common/theme/colors';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import CustomBackdrop from '@/common/components/CustomBackdrop';
 import { usePlacesBottomSheet } from './usePlacesBottomSheet';
 import SearchIcon from '@/assets/icons/SearchIcon';
 import { MainStackParamList } from '@/core/navigation/types';
 
-export const CreateNewRestaurant: FC = () => {
+type RestaurantFormScreenRouteProp = RouteProp<
+    MainStackParamList,
+    'RestaurantForm'
+>;
+
+export const RestaurantForm: FC = () => {
     const navigation = useNavigation<NavigationProp<MainStackParamList>>();
+    const { params } = useRoute<RestaurantFormScreenRouteProp>();
+    const { type, restaurant } = params;
     const { top } = useSafeAreaInsets();
-    const { form, submitForm } = useRestaurantForm({ navigation });
+
+    const { form, submitForm } = useRestaurantForm({ navigation, restaurant, type });
     const { isSubmitting } = form.formState;
     const bottomSheetModal = usePlacesBottomSheet({ form });
     const {
@@ -46,9 +54,12 @@ export const CreateNewRestaurant: FC = () => {
     } = bottomSheetModal;
     const imageValue = form.watch('image');
 
-    const backdropComponent = useCallback((props: BottomSheetBackdropProps) => (
-        <CustomBackdrop {...props} onPress={closeSearchModal} />
-    ), [closeSearchModal]);
+    const backdropComponent = useCallback(
+        (props: BottomSheetBackdropProps) => (
+            <CustomBackdrop {...props} onPress={closeSearchModal} />
+        ),
+        [closeSearchModal]
+    );
 
     return (
         <BottomSheetModalProvider>
@@ -75,11 +86,13 @@ export const CreateNewRestaurant: FC = () => {
                         control={form.control}
                         name="name"
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <Pressable onPress={() => {
-                                if (!isSubmitting) {
-                                    openSearchModal();
-                                }
-                            }}>
+                            <Pressable
+                                onPress={() => {
+                                    if (!isSubmitting) {
+                                        openSearchModal();
+                                    }
+                                }}
+                            >
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Nombre"
@@ -144,7 +157,7 @@ export const CreateNewRestaurant: FC = () => {
                         <ActivityIndicator size="small" color={colors.tailorBlack} />
                     ) : (
                         <TextBase weight="bold" size={16}>
-                            Guardar
+                            {type === 'edit' ? 'Guardar cambios' : 'Guardar'}
                         </TextBase>
                     )}
                 </Pressable>
@@ -192,8 +205,6 @@ export const CreateNewRestaurant: FC = () => {
         </BottomSheetModalProvider>
     );
 };
-
-export default memo(CreateNewRestaurant);
 
 const styles = StyleSheet.create({
     container: {
@@ -244,7 +255,7 @@ const styles = StyleSheet.create({
         opacity: 0.6,
     },
     bottomSheetBackground: {
-        backgroundColor: '#fff',
+        backgroundColor: colors.tailorWhite,
     },
     sheetContent: {
         flex: 1,

@@ -1,4 +1,6 @@
+import { Restaurant } from '@/features/restaurants/models';
 import { NavigationProp, NavigatorScreenParams } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 declare global {
     namespace ReactNavigation {
@@ -20,9 +22,10 @@ export type MainTabParamList = {
 };
 
 // Main stack que envuelve el BottomTabNavigator y la pantalla modal de CreateNewRestaurant
+export type RestaurantFormScreenParams = { type: 'create', restaurant: null } | { type: 'edit', restaurant: Restaurant };
 export type MainStackParamList = {
     MainTabs: NavigatorScreenParams<MainTabParamList>;
-    CreateNewRestaurant: undefined;
+    RestaurantForm: RestaurantFormScreenParams;
     RestaurantDetails: { id: string };
     CreateRestaurantResultScreen: { status: 'success' | 'error' };
 };
@@ -39,3 +42,4 @@ export type RootStackParamList = {
 };
 
 export type MainTabNavigationProp = NavigationProp<MainTabParamList>;
+export type MainStackNavigationProp = NativeStackNavigationProp<MainStackParamList>

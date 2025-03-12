@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainStackParamList } from '@/core/navigation/types';
+import { MainStackNavigationProp } from '@/core/navigation/types';
 import { colors } from '@/common/theme/colors';
 
-const FloatingButton: React.FC = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+const FloatingButton: FC = () => {
+    const navigation = useNavigation<MainStackNavigationProp>();
 
     const handlePress = () => {
-        navigation.navigate('CreateNewRestaurant');
+        navigation.navigate('RestaurantForm', { type: 'create', restaurant: null });
     };
 
     return (
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     plusIcon: {
-        color: '#fff',
+        color: colors.tailorWhite,
         fontSize: 32,
         lineHeight: 32,
     },
