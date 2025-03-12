@@ -19,6 +19,7 @@ export const RestaurantDetails: FC = () => {
     const { top } = useSafeAreaInsets();
     const { params } = useRoute<RestaurantDetailsRouteProp>();
     const { data, refetch } = useGetRestaurantById({ id: params.id });
+
     const onDeleteSuccess = useCallback(() => {
         navigation.navigate('MainTabs', { screen: 'Restaurants' });
     }, [navigation]);
@@ -35,7 +36,7 @@ export const RestaurantDetails: FC = () => {
                 </TextBase>
             </View>
             <ReviewForm restaurantId={data.id} refetch={refetch} />
-            <ReviewList reviews={data.reviews} />
+            <ReviewList reviews={data.reviews} refetch={refetch} />
         </ScrollView>
     ), [navigation, top, refetch, onDeleteSuccess]);
 

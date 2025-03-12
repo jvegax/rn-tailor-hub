@@ -1,14 +1,12 @@
 import { View, StyleSheet } from 'react-native';
 import React, { FC, memo, useMemo } from 'react';
-import { Restaurant } from '@/features/restaurants/models';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import RatingStars from '@/views/bottomTabs/components/RatingStars';
+import { Props } from './types';
 
-type Props = { reviews: Restaurant['reviews'] }
-
-const ReviewList: FC<Props> = ({ reviews }) => {
+const ReviewList: FC<Props> = ({ reviews, refetch }) => {
     const { bottom } = useSafeAreaInsets();
 
     const renderReviews = useMemo(() => reviews.map((review, index) => (
