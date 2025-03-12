@@ -1,37 +1,44 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import type { NetworkData } from '@/common/domain/NetworkData/types';
 import { useMemo } from 'react';
 import { getRestaurants } from '../../data/getRestaurants';
 import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
 import { Restaurant } from '@/features/restaurants/models';
 
-type Props = {
-    page: number;
-    limit: number;
-};
-
-export const useGetRestaurants = ({
-    page,
-    limit,
-}: Props) => {
+export const useGetRestaurants = () => {
     const fetchWithAuth = useAuthFetch();
-    const { data, isLoading, isError, refetch, isRefetchError, isRefetching } = useQuery<Restaurant[]>({
-        queryKey: ['getRestaurants', page, limit],
-        queryFn: () => getRestaurants({ page, limit, fetchWithAuth }),
+    const {
+        data,
+        error,
+        isError,
+        isFetching,
+        isRefetching,
+        isRefetchError,
+        isFetchingNextPage,
+        fetchNextPage,
+        hasNextPage,
+        refetch,
+    } = useInfiniteQuery<Restaurant[], Error>({
+        queryKey: ['getRestaurants'],
+        queryFn: ({ pageParam = 1 }) =>
+            getRestaurants({ page: pageParam as number, limit: 10, fetchWithAuth }),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, _, lastPageParam: any) => {
+            return lastPage.length === 10 ? lastPageParam + 1 : undefined;
+        },
     });
 
     const networkData = useMemo<NetworkData<Restaurant[]>>(() => {
-        if (isLoading || isRefetching) {
+        const restaurants = data ? data.pages.flat() : [];
+
+        if ((isFetching || isRefetching) && !isFetchingNextPage) {
             return { type: 'loading' };
         }
-
-        if (isError || !data || isRefetchError) {
-            console.log('Error al obtener los restaurantes', { isError, data, isRefetchError });
+        if (error || isError || !restaurants || isRefetchError) {
             return { type: 'error', message: 'Error al obtener los restaurantes' };
         }
+        return { type: 'data', data: restaurants };
+    }, [data, isFetching, isError, error, isRefetching, isRefetchError, isFetchingNextPage]);
 
-        return { type: 'data', data };
-    }, [data, isLoading, isError, isRefetchError, isRefetching]);
-
-    return { data: networkData, refetch };
+    return { data: networkData, fetchNextPage, hasNextPage, isFetchingNextPage, refetch };
 };

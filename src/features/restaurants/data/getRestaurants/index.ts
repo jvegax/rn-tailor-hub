@@ -15,7 +15,6 @@ export const getRestaurants = async ({
         throw new Error('Error al obtener los restaurantes');
     }
     const data = await response.json();
-    console.log(JSON.stringify(data, null, 2));
     const restaurants: Restaurant[] = data.restaurantList.map(mapToRestaurant);
     return restaurants;
 };
