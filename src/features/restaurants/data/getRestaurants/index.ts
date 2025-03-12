@@ -1,15 +1,14 @@
 import { Props } from './types';
 import { Restaurant } from '../../models';
 import { mapToRestaurant } from '../../models/mapToRestaurant';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api/restaurant/list';
+import { API_URL } from '@/core/api';
 
 export const getRestaurants = async ({
     page,
     limit,
     fetchWithAuth,
 }: Props): Promise<Restaurant[]> => {
-    const url = `${API_URL}/?limit=${limit}&page=${page}`;
+    const url = `${API_URL}/restaurant/list/?limit=${limit}&page=${page}`;
     const response = await fetchWithAuth(url);
     if (!response.ok) {
         throw new Error('Error al obtener los restaurantes');

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { storage } from '@/core/cache';
 import { User } from '../models';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
+import { API_URL } from '@/core/api';
 
 type LoginResponse = { token: string; refreshToken: string, userData: User } | null;
 export async function login(email: string, password: string): Promise<LoginResponse> {
@@ -43,6 +43,30 @@ export async function login(email: string, password: string): Promise<LoginRespo
         storage.set('authToken', token);
         storage.set('refreshToken', refreshToken);
 
+        return { token, refreshToken, userData };
+    } catch (error) {
+        return null;
+    }
+}
+
+export async function register(email: string, password: string, name: string): Promise<LoginResponse> {
+    try {
+        const response = await fetch(`${API_URL}/auth/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password, name }),
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+        const loginResponse = await login(email, password);
+        if (!loginResponse) {
+            return null;
+        }
+        const { token, refreshToken, userData } = loginResponse;
         return { token, refreshToken, userData };
     } catch (error) {
         return null;

@@ -1,5 +1,5 @@
 import { storage } from '@/core/cache';
-import { login, logout } from '@/features/auth/data';
+import { login, logout, register } from '@/features/auth/data';
 import { User } from '@/features/auth/models';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
@@ -13,6 +13,7 @@ type AuthContextType = {
     userData: User | null;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
+    register: (email: string, password: string, name: string) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,6 +49,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return false;
     };
 
+    const registerHandler = async (email: string, password: string, name: string): Promise<boolean> => {
+        const result = await register(email, password, name);
+        if (result) {
+            setAuthData({ token: result.token, refreshToken: result.refreshToken });
+            setUserData(result.userData);
+            return true;
+        }
+        return false;
+    };
+
     const logoutHandler = async () => {
         await logout();
         setAuthData(null);
@@ -55,7 +66,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ authData, login: loginHandler, logout: logoutHandler, userData }}>
+        <AuthContext.Provider value={{
+            authData,
+            userData,
+            login: loginHandler,
+            logout: logoutHandler,
+            register: registerHandler,
+        }}>
             {children}
         </AuthContext.Provider>
     );

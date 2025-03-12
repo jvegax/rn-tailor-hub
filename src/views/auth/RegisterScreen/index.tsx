@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
     withTiming,
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { Controller } from 'react-hook-form';
 import ArrowLeftIcon from '@/assets/icons/ArrowLeftIcon';
 import TailorLogo from '@/assets/icons/TailorLogo';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
-import { DrawerParamList } from '@/core/navigation/types';
+import { useRegisterForm } from './form';
 
 export const RegisterScreen = () => {
+    const { form, submitForm } = useRegisterForm();
+    const {
+        formState: { isSubmitting },
+    } = form;
     const progress = useSharedValue(0);
     const [showPassword, setShowPassword] = useState(false);
     const OFFSET = 150;
 
-    const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+    const { goBack } = useNavigation();
 
     const initialGroupStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: -progress.value * OFFSET }],
@@ -35,7 +39,7 @@ export const RegisterScreen = () => {
             progress.value = withTiming(1, { duration: 300 });
             setShowPassword(true);
         } else {
-            // Lógica de finalizar registro
+            submitForm();
         }
     };
 
@@ -44,7 +48,7 @@ export const RegisterScreen = () => {
             progress.value = withTiming(0, { duration: 300 });
             setShowPassword(false);
         } else {
-            navigation.goBack();
+            goBack();
         }
     };
 
@@ -61,42 +65,79 @@ export const RegisterScreen = () => {
 
                 {/* Contenedor relativo donde se “pegan” los inputs abajo */}
                 <View style={styles.groupsContainer}>
-                    {/* Grupo inicial (Email y Nombre) */}
+                    {/* Grupo inicial (Email y Nombre de usuario) */}
                     <Animated.View style={[initialGroupStyle, styles.groupInitial]}>
-                        <TextBase weight="bold" color="tailorWhite">
-                            Email
-                        </TextBase>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Añade tu email"
-                            placeholderTextColor={colors.tailorGrayIcon}
+                        <Controller
+                            control={form.control}
+                            name="email"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <>
+                                    <TextBase weight="bold" color="tailorWhite">
+                                        Email
+                                    </TextBase>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Añade tu email"
+                                        placeholderTextColor={colors.tailorGrayIcon}
+                                        onChangeText={onChange}
+                                        onBlur={onBlur}
+                                        value={value}
+                                    />
+                                </>
+                            )}
                         />
-                        <TextBase weight="bold" color="tailorWhite">
-                            Nombre de usuario
-                        </TextBase>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Añade tu nombre"
-                            placeholderTextColor={colors.tailorGrayIcon}
+                        <Controller
+                            control={form.control}
+                            name="name"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <>
+                                    <TextBase weight="bold" color="tailorWhite">
+                                        Nombre de usuario
+                                    </TextBase>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Añade tu nombre"
+                                        placeholderTextColor={colors.tailorGrayIcon}
+                                        onChangeText={onChange}
+                                        onBlur={onBlur}
+                                        value={value}
+                                    />
+                                </>
+                            )}
                         />
                     </Animated.View>
                     {/* Grupo final (Crear contraseña) */}
                     <Animated.View style={[finalGroupStyle, styles.groupFinal]}>
-                        <TextBase weight="bold" color="tailorWhite">
-                            Crear una nueva contraseña
-                        </TextBase>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Añade una contraseña"
-                            placeholderTextColor={colors.tailorGrayIcon}
+                        <Controller
+                            control={form.control}
+                            name="password"
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <>
+                                    <TextBase weight="bold" color="tailorWhite">
+                                        Crear una nueva contraseña
+                                    </TextBase>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Añade una contraseña"
+                                        placeholderTextColor={colors.tailorGrayIcon}
+                                        onChangeText={onChange}
+                                        onBlur={onBlur}
+                                        value={value}
+                                        secureTextEntry
+                                    />
+                                </>
+                            )}
                         />
                     </Animated.View>
                 </View>
-                {/* Botón “Siguiente/Finalizar” en la parte más inferior */}
-                <Pressable style={styles.submitButton} onPress={handleSubmit}>
-                    <TextBase size={16} weight="bold" color="tailorBlack">
-                        {showPassword ? 'Finalizar' : 'Siguiente'}
-                    </TextBase>
+                <Pressable style={styles.submitButton} onPress={handleSubmit} disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <ActivityIndicator size="small" color={colors.tailorBlack} />
+                    ) : (
+                        <TextBase size={16} weight="bold" color="tailorBlack">
+                            {showPassword ? 'Finalizar' : 'Siguiente'}
+                        </TextBase>
+                    )}
                 </Pressable>
             </View>
         </View>

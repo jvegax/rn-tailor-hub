@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { defaultValues } from './mock';
 import { Props } from './types';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
+import { API_URL } from '@/core/api';
 
 export const useReviewForm = ({ restaurantId, refetch }: Props) => {
     const fetchWithAuth = useAuthFetch();
