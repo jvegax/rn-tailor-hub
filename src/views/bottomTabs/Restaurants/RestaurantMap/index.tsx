@@ -8,8 +8,11 @@ import NetworkData from '@/common/domain/NetworkData';
 import MapMarkerIcon from '@/assets/icons/MapMarkerIcon';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
+import { MainStackNavigationProp } from '@/core/navigation/types';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantMap: FC = () => {
+    const navigation = useNavigation<MainStackNavigationProp>();
     const mapRef = useRef<MapView>(null);
     const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetRestaurants();
 
@@ -25,9 +28,9 @@ const RestaurantMap: FC = () => {
         }
     }, []);
 
-    const handlePressTooltip = useCallback(() => {
-        console.log('Tooltip pressed');
-    }, []);
+    const handlePressTooltip = useCallback((id: string) => {
+        navigation.navigate('RestaurantDetails', { id });
+    }, [navigation]);
 
     const renderCard = useCallback(({ item }: { item: Restaurant }) => (
         <RestaurantItem item={item} onPress={() => handleCardPress(item)} />
@@ -70,7 +73,7 @@ const RestaurantMap: FC = () => {
                     }}
                 >
                     <MapMarkerIcon size={48} />
-                    <Callout tooltip onPress={handlePressTooltip}>
+                    <Callout tooltip onPress={() => handlePressTooltip(restaurant.id)}>
                         <View style={styles.badgeContainer}>
                             <TextBase weight="bold" size={14} color="tailorWhite">
                                 {restaurant.name}
