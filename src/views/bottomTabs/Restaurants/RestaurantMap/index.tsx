@@ -1,13 +1,19 @@
-import React, { FC, memo, useRef } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import MapView, { Region } from 'react-native-maps';
+import React, { FC, memo, useCallback, useRef } from 'react';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import MapView, { Marker, Callout, Region } from 'react-native-maps';
 import { Restaurant } from '@/features/restaurants/models';
 import RestaurantItem from './RestaurantItem';
+import { useGetRestaurants } from '@/features/restaurants/hooks/useGetRestaurants';
+import NetworkData from '@/common/domain/NetworkData';
+import MapMarkerIcon from '@/assets/icons/MapMarkerIcon';
+import TextBase from '@/common/components/TextBase';
+import { colors } from '@/common/theme/colors';
 
 const RestaurantMap: FC = () => {
     const mapRef = useRef<MapView>(null);
+    const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetRestaurants();
 
-    const handleCardPress = (restaurant: Restaurant) => {
+    const handleCardPress = useCallback((restaurant: Restaurant) => {
         const region: Region = {
             latitude: restaurant.latlng.lat,
             longitude: restaurant.latlng.lng,
@@ -15,12 +21,42 @@ const RestaurantMap: FC = () => {
             longitudeDelta: 0.01,
         };
         if (mapRef.current) {
-            mapRef.current.animateToRegion(region, 1000);
+            mapRef.current.animateToRegion(region, 1500);
         }
-    };
+    }, []);
 
-    const renderCard = ({ item }: { item: Restaurant }) => (
+    const handlePressTooltip = useCallback(() => {
+        console.log('Tooltip pressed');
+    }, []);
+
+    const renderCard = useCallback(({ item }: { item: Restaurant }) => (
         <RestaurantItem item={item} onPress={() => handleCardPress(item)} />
+    ), [handleCardPress]);
+
+    const renderFooter = useCallback(() => {
+        return isFetchingNextPage ? <ActivityIndicator size="small" style={styles.loadingIndicator} /> : null;
+    }, [isFetchingNextPage]);
+
+    const onEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+        }
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    const renderData = useCallback(
+        (data: Restaurant[]) => (
+            <FlatList
+                data={data}
+                renderItem={renderCard}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.listContent}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={renderFooter}
+            />
+        ),
+        [renderCard, renderFooter, onEndReached]
     );
 
     return (
@@ -36,16 +72,29 @@ const RestaurantMap: FC = () => {
                         longitudeDelta: 0.0421,
                     }}
                 >
-                    {/* Opcional: Puedes agregar un marcador para la región actual si lo deseas */}
+                    {data?.type === 'data' && data.data.map((restaurant: Restaurant) => (
+                        <Marker
+                            key={restaurant.id}
+                            coordinate={{
+                                latitude: restaurant.latlng.lat,
+                                longitude: restaurant.latlng.lng,
+                            }}
+                        >
+                            <MapMarkerIcon size={48} />
+                            <Callout tooltip onPress={handlePressTooltip}>
+                                <View style={styles.badgeContainer}>
+                                    <TextBase weight="bold" size={14} color="tailorWhite">
+                                        {restaurant.name}
+                                    </TextBase>
+                                </View>
+                            </Callout>
+                        </Marker>
+                    ))}
                 </MapView>
                 <View style={styles.cardsContainer}>
-                    <FlatList
-                        data={[]}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={renderCard}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.listContent}
+                    <NetworkData
+                        data={data}
+                        renderData={renderData}
                     />
                 </View>
             </View>
@@ -78,5 +127,18 @@ const styles = StyleSheet.create({
     listContent: {
         paddingLeft: 16,
         gap: 8,
+    },
+    loadingIndicator: {
+        marginVertical: 16,
+    },
+    badgeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.tailorBlue,
+        minWidth: 100,
+        paddingHorizontal: 8,
+        paddingVertical: 8,
+        borderRadius: 12,
     },
 });
