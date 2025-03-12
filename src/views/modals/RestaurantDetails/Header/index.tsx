@@ -16,8 +16,11 @@ import { useFavorites } from '@/core/providers/favourites';
 import { Props } from './types';
 import VerticalDotsIcon from '@/assets/icons/VerticalDotsIcon';
 import { Portal } from '@gorhom/portal';
+import { useNavigation } from '@react-navigation/native';
+import { MainStackNavigationProp } from '@/core/navigation/types';
 
 const Header: FC<Props> = ({ restaurant, goBack }) => {
+    const navigation = useNavigation<MainStackNavigationProp>();
     const { favorites, toggleFavorite } = useFavorites();
     const isFavorite = favorites.some(r => r.id === restaurant.id);
     const insets = useSafeAreaInsets();
@@ -32,9 +35,9 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
     }, []);
 
     const handleEdit = useCallback(() => {
-        console.log('Acción Editar');
         setPortalVisible(false);
-    }, []);
+        navigation.navigate('RestaurantForm', { type: 'edit', restaurant });
+    }, [navigation, restaurant]);
 
     const handleDelete = useCallback(() => {
         console.log('Acción Eliminar');

@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainStackParamList } from '@/core/navigation/types';
+import { MainStackNavigationProp } from '@/core/navigation/types';
 import { colors } from '@/common/theme/colors';
 
 const FloatingButton: FC = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const navigation = useNavigation<MainStackNavigationProp>();
 
     const handlePress = () => {
-        navigation.navigate('RestaurantForm', { type: 'create' });
+        navigation.navigate('RestaurantForm', { type: 'create', restaurant: null });
     };
 
     return (
