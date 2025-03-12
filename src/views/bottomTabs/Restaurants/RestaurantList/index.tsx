@@ -1,13 +1,13 @@
 import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import React, { FC, memo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import RestaurantItem from '../../components/RestaurantItem';
 import { Restaurant } from '@/features/restaurants/models';
 import { Props } from './types';
 import { useGetRestaurants } from '@/features/restaurants/hooks/useGetRestaurants';
 import NetworkData from '@/common/domain/NetworkData';
 import ErrorScreen from '@/common/components/ErrorScreen';
 import { colors } from '@/common/theme/colors';
+import RestaurantItem from '../../components/RestaurantItem';
 
 const RestaurantList: FC<Props> = ({ navigation }) => {
     const {
@@ -32,7 +32,6 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
     );
 
     const onEndReached = useCallback(() => {
-        console.log('hasNextPage', hasNextPage);
         if (hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
