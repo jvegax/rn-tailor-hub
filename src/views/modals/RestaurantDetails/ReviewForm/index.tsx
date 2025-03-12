@@ -5,13 +5,10 @@ import TextBase from '@/common/components/TextBase';
 import StarReviewIcon from '@/assets/icons/StarReviewIcon';
 import { colors } from '@/common/theme/colors';
 import { useReviewForm } from './form';
+import { Props } from './types';
 
-type Props = {
-    restaurantId: string;
-};
-
-const ReviewForm: FC<Props> = ({ restaurantId }) => {
-    const { form, onSubmit } = useReviewForm({ restaurantId });
+const ReviewForm: FC<Props> = ({ restaurantId, refetch }) => {
+    const { form, onSubmit } = useReviewForm({ restaurantId, refetch });
     const {
         control,
         formState: { errors, isSubmitting },
