@@ -49,6 +49,51 @@ export async function login(email: string, password: string): Promise<LoginRespo
     }
 }
 
+export async function register(email: string, password: string, name: string): Promise<LoginResponse> {
+    try {
+        const response = await fetch(`${API_URL}/auth/signup`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password, name }),
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const token = response.headers.get('authorization');
+
+        const setCookie = response.headers.get('set-cookie');
+        let refreshToken = '';
+        if (setCookie) {
+            const match = setCookie.match(/refreshToken=([^;]+)/);
+            if (match) {
+                refreshToken = match[1];
+            }
+        }
+
+        if (!token || !refreshToken) {
+            return null;
+        }
+
+        const body = await response.json();
+        const userData: User = {
+            id: body._id,
+            email: body.email,
+            name: body.name,
+        };
+        storage.set('userData', JSON.stringify(userData));
+        storage.set('authToken', token);
+        storage.set('refreshToken', refreshToken);
+
+        return { token, refreshToken, userData };
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function refreshToken(): Promise<string | null> {
     try {
         const response = await fetch(`${API_URL}/auth/refresh-token`, {

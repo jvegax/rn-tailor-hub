@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
     withTiming,
 } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import ArrowLeftIcon from '@/assets/icons/ArrowLeftIcon';
 import TailorLogo from '@/assets/icons/TailorLogo';
 import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
-import { DrawerParamList } from '@/core/navigation/types';
+import { useRegisterForm } from './form';
 
 export const RegisterScreen = () => {
+    const { form, submitForm } = useRegisterForm();
     const progress = useSharedValue(0);
     const [showPassword, setShowPassword] = useState(false);
     const OFFSET = 150;
 
-    const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
+    const { goBack } = useNavigation();
 
     const initialGroupStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: -progress.value * OFFSET }],
@@ -35,7 +35,7 @@ export const RegisterScreen = () => {
             progress.value = withTiming(1, { duration: 300 });
             setShowPassword(true);
         } else {
-            // Lógica de finalizar registro
+            submitForm();
         }
     };
 
@@ -44,7 +44,7 @@ export const RegisterScreen = () => {
             progress.value = withTiming(0, { duration: 300 });
             setShowPassword(false);
         } else {
-            navigation.goBack();
+            goBack();
         }
     };
 
@@ -92,10 +92,15 @@ export const RegisterScreen = () => {
                         />
                     </Animated.View>
                 </View>
-                {/* Botón “Siguiente/Finalizar” en la parte más inferior */}
                 <Pressable style={styles.submitButton} onPress={handleSubmit}>
                     <TextBase size={16} weight="bold" color="tailorBlack">
-                        {showPassword ? 'Finalizar' : 'Siguiente'}
+                        {form.formState.isSubmitting ? (
+                            <ActivityIndicator size="small" color={colors.tailorBlue} />
+                        ) : showPassword ? (
+                            'Finalizar'
+                        ) : (
+                            'Siguiente'
+                        )}
                     </TextBase>
                 </Pressable>
             </View>
