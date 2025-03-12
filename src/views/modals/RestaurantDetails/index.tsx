@@ -36,7 +36,7 @@ export const RestaurantDetails: FC = () => {
                 </TextBase>
             </View>
             <ReviewForm restaurantId={data.id} refetch={refetch} />
-            <ReviewList reviews={data.reviews} refetch={refetch} />
+            <ReviewList reviews={data.reviews} refetch={refetch} restaurantId={data.id} />
         </ScrollView>
     ), [navigation, top, refetch, onDeleteSuccess]);
 
