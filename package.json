@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "sc": "npx react-native start --reset-cache"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.2",

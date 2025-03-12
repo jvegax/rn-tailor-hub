@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { IconProps } from './types';
 import { colors } from '@/common/theme/colors';
 
@@ -25,4 +25,4 @@ const VerticalDotsIcon: FC<IconProps> = ({
     </Svg>
 );
 
-export default memo(VerticalDotsIcon);
+export default VerticalDotsIcon;

@@ -1,7 +1,6 @@
+import { PLACES_API_URL } from '@/core/api';
 import { SearchRestaurantResult } from '../../models';
 import Config from 'react-native-config';
-
-const PLACES_API_URL = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
 
 export async function searchPlaces(query: string): Promise<SearchRestaurantResult[]> {
   const GOOGLE_PLACES_API_KEY = Config.GOOGLE_PLACES_API_KEY;

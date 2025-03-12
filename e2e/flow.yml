@@ -10,7 +10,9 @@ appId: com.tailorhub.app
 - tapOn:
     id: 'login-submit'
 - tapOn:
-    id: 'restaurant-item-4'
+    id: 'fav-tab'
+- tapOn:
+    id: 'restaurant-item-0'
 - tapOn:
     id: 'star-4'
 - tapOn:
@@ -36,3 +38,12 @@ appId: com.tailorhub.app
     text: 'Editar'
 - tapOn:
     id: 'edit-restaurant'
+- tapOn:
+    id: 'restaurant-description-input'
+- eraseText
+- inputText: 'Test e2e usando maestro 🚀'
+- hideKeyboard
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: 'submit-restaurant-form'

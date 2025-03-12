@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
+
 import React, { FC } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,8 +7,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import tailorTheme from '@/common/theme';
 import { colors } from '@/common/theme/colors';
-
-// Importa tus pantallas
 import { LoginScreen } from '@/views/auth/LoginScreen';
 import { RegisterScreen } from '@/views/auth/RegisterScreen';
 import { Restaurants } from '@/views/bottomTabs/Restaurants';
@@ -63,7 +62,7 @@ const MainTabNavigator: FC = () => {
                     component={Favourites}
                     options={{
                         tabBarIcon: ({ color, size }) => (
-                            <HeartIcon color={color} width={size} height={size} />
+                            <HeartIcon testID="fav-tab" color={color} width={size} height={size} />
                         ),
                     }}
                 />

@@ -87,6 +87,7 @@ export const RestaurantForm: FC = () => {
                         name="name"
                         render={({ field: { onChange, onBlur, value } }) => (
                             <Pressable
+                                testID="restaurant-name-input"
                                 onPress={() => {
                                     if (!isSubmitting) {
                                         openSearchModal();
@@ -134,6 +135,7 @@ export const RestaurantForm: FC = () => {
                         name="description"
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput
+                                testID="restaurant-description-input"
                                 style={[styles.input, styles.textArea]}
                                 placeholder="Escribe información del restaurante"
                                 onBlur={onBlur}
@@ -149,6 +151,7 @@ export const RestaurantForm: FC = () => {
                     />
                 </View>
                 <Pressable
+                    testID="submit-restaurant-form"
                     onPress={submitForm}
                     style={[styles.button, isSubmitting && styles.disabledButton]}
                     disabled={isSubmitting}
@@ -178,6 +181,9 @@ export const RestaurantForm: FC = () => {
                     <View style={styles.searchBarContainer}>
                         <SearchIcon />
                         <BottomSheetTextInput
+                            testID="search-input"
+                            accessible={true}
+                            accessibilityLabel="search-input"
                             style={styles.searchInput}
                             placeholder="Buscar restaurante..."
                             onChangeText={handleSearch}
@@ -285,3 +291,5 @@ const styles = StyleSheet.create({
         borderBottomColor: colors.tailorGray,
     },
 });
+
+export default RestaurantForm;

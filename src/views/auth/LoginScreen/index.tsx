@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -18,7 +18,7 @@ import { AuthStackParamList } from '@/core/navigation/types';
 import { useAuth } from '@/core/providers/auth';
 import TailorLogo from '@/assets/icons/TailorLogo';
 
-export const LoginScreen = () => {
+export const LoginScreen: FC = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
     const { login } = useAuth();
     const [email, setEmail] = useState('');

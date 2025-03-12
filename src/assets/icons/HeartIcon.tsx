@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { memo } from 'react';
 import { IconProps } from './types';
 import { colors } from '@/common/theme/colors';
 
@@ -15,4 +14,4 @@ const HeartIcon = ({ color = colors.tailorGrayIcon, ...props }: IconProps) => (
     </Svg>
 );
 
-export default memo(HeartIcon);
+export default HeartIcon;

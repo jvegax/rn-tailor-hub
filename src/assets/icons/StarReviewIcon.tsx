@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Svg, { Defs, ClipPath, Rect, Path, SvgProps } from 'react-native-svg';
-import { memo } from 'react';
 import { colors } from '@/common/theme/colors';
 
 interface StarReviewIconProps extends SvgProps {
@@ -49,4 +48,4 @@ const StarReviewIcon: React.FC<StarReviewIconProps> = ({
     );
 };
 
-export default memo(StarReviewIcon);
+export default StarReviewIcon;
