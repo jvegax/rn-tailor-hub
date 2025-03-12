@@ -31,7 +31,7 @@ export const RestaurantDetails: FC = () => {
                     {data.description}
                 </TextBase>
             </View>
-            <ReviewForm />
+            <ReviewForm restaurantId={data.id} />
             <ReviewList reviews={data.reviews} />
         </ScrollView>
     ), [navigation, top]);

@@ -29,7 +29,6 @@ export async function login(email: string, password: string): Promise<LoginRespo
         }
 
         if (!token || !refreshToken) {
-            console.error('Faltan token o refreshToken en la respuesta');
             return null;
         }
 
@@ -38,7 +37,6 @@ export async function login(email: string, password: string): Promise<LoginRespo
 
         return { token, refreshToken };
     } catch (error) {
-        console.error('Error en login:', error);
         return null;
     }
 }
@@ -65,7 +63,6 @@ export async function refreshToken(): Promise<string | null> {
         }
         return null;
     } catch (error) {
-        console.error('Error en refreshToken:', error);
         return null;
     }
 }
