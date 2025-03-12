@@ -42,7 +42,7 @@ const ReviewItem: FC<Props> = ({
                         {isPending ? (
                             <ActivityIndicator size="small" color={colors.tailorBlack} />
                         ) : (
-                            <TextBase size={16} weight="bold" color="tailorBlack">
+                            <TextBase size={16} weight="bold" color="tailorBlack" testID={`delete-review-${index}`}>
                                 Eliminar
                             </TextBase>
                         )}

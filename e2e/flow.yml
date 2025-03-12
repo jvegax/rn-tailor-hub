@@ -9,3 +9,30 @@ appId: com.tailorhub.app
 - inputText: '25jvegaxtailor'
 - tapOn:
     id: 'login-submit'
+- tapOn:
+    id: 'restaurant-item-4'
+- tapOn:
+    id: 'star-4'
+- tapOn:
+    id: 'comment-input'
+- inputText:
+    text: 'Test e2e usando maestro 🚀'
+- tapOn:
+    id: 'submit-comment'
+- tapOn:
+    id: 'submit-comment'
+- scrollUntilVisible:
+    element:
+      text: 'Eliminar'
+- assertVisible:
+    text: 'Eliminar'
+- tapOn:
+    text: 'Eliminar'
+- tapOn:
+    id: 'vertical-dots-menu'
+- extendedWaitUntil:
+    visible: 'Editar'
+- assertVisible:
+    text: 'Editar'
+- tapOn:
+    id: 'edit-restaurant'

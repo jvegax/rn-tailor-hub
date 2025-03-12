@@ -20,8 +20,8 @@ export const Favourites = () => {
     );
 
     const renderRestaurantItem = useCallback(
-        ({ item }: { item: Restaurant }) => (
-            <RestaurantItem item={item} onPress={() => navigateRestaurantDetails(item.id)} />
+        ({ item, index }: { item: Restaurant, index: number }) => (
+            <RestaurantItem index={index} item={item} onPress={() => navigateRestaurantDetails(item.id)} />
         ),
         [navigateRestaurantDetails]
     );

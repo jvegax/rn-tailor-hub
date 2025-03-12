@@ -3,7 +3,6 @@ import {
     ImageBackground,
     View,
     Pressable,
-    TouchableWithoutFeedback,
 } from 'react-native';
 import React, { FC, memo, useCallback, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -59,7 +58,7 @@ const Header: FC<Props> = ({ restaurant, goBack, onDeleteSuccess }) => {
                 <View style={styles.overlay} />
                 <View style={styles.actionsContainer}>
                     <Pressable onPress={goBack} style={styles.actionWrapper}>
-                        <GoBackIcon />
+                        <GoBackIcon testID="restaurant-go-back" />
                     </Pressable>
                     <View style={styles.leftHeaderActions}>
                         <Pressable onPress={handlePressFavorite} style={styles.actionWrapper}>
@@ -69,7 +68,7 @@ const Header: FC<Props> = ({ restaurant, goBack, onDeleteSuccess }) => {
                                 <HeartIcon color={colors.tailorWhite} width={24} height={24} />
                             )}
                         </Pressable>
-                        <Pressable style={styles.actionWrapper} onPress={togglePortalActions}>
+                        <Pressable testID="vertical-dots-menu" style={styles.actionWrapper} onPress={togglePortalActions}>
                             <VerticalDotsIcon />
                         </Pressable>
                     </View>
@@ -83,25 +82,22 @@ const Header: FC<Props> = ({ restaurant, goBack, onDeleteSuccess }) => {
             </ImageBackground>
             {portalVisible && (
                 <Portal>
-                    <Pressable style={styles.backdrop} onPress={() => setPortalVisible(false)}>
-                        <TouchableWithoutFeedback>
-                            <View style={[styles.portalContainer, { marginTop: insets.top + 58 }]}>
-                                <View style={styles.portalCard}>
-                                    <Pressable style={styles.portalAction} onPress={handleEdit}>
-                                        <TextBase color="tailorBlack" size={16}>
-                                            Editar
-                                        </TextBase>
-                                    </Pressable>
-                                    <View style={styles.divider} />
-                                    <Pressable style={styles.portalAction} onPress={handleDelete}>
-                                        <TextBase color="tailorRed" size={16}>
-                                            Eliminar
-                                        </TextBase>
-                                    </Pressable>
-                                </View>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </Pressable>
+                    <View style={styles.modalOverlay}>
+                        <Pressable style={styles.modalBackground} onPress={() => setPortalVisible(false)} />
+                        <View style={[styles.modalContent, { marginTop: insets.top + 58 }]}>
+                            <Pressable testID="edit-restaurant" style={styles.portalAction} onPress={handleEdit}>
+                                <TextBase color="tailorBlack" size={16}>
+                                    Editar
+                                </TextBase>
+                            </Pressable>
+                            <View style={styles.divider} />
+                            <Pressable testID="delete-restaurant" style={styles.portalAction} onPress={handleDelete}>
+                                <TextBase color="tailorRed" size={16}>
+                                    Eliminar
+                                </TextBase>
+                            </Pressable>
+                        </View>
+                    </View>
                 </Portal>
             )}
         </>
@@ -150,29 +146,31 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 16,
     },
-    backdrop: {
+    modalOverlay: {
         position: 'absolute',
         top: 0,
-        bottom: 0,
         left: 0,
         right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
     },
-    portalContainer: {
+    modalBackground: {
         position: 'absolute',
         top: 0,
-        right: 32,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
-    portalCard: {
+    modalContent: {
         backgroundColor: colors.tailorWhite,
         borderRadius: 8,
         overflow: 'hidden',
         width: 120,
+        marginRight: 32,
         shadowColor: colors.tailorBlack,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,

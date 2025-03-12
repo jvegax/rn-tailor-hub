@@ -8,7 +8,7 @@ import RatingStars from '../RatingStars';
 import { Props } from './types';
 import { useFavorites } from '@/core/providers/favourites';
 
-const RestaurantItem: FC<Props> = ({ item, onPress }) => {
+const RestaurantItem: FC<Props> = ({ item, onPress, index }) => {
     const { favorites, toggleFavorite } = useFavorites();
     const isFavorite = favorites.some(r => r.id === item.id);
     const handleToggleFavorite = () => toggleFavorite(item);
@@ -19,8 +19,7 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
             : 0;
 
     return (
-        <View style={styles.container}>
-            {/* Sección izquierda + central: Presionable para navegar */}
+        <View style={styles.container} testID={`restaurant-item-${index}`}>
             <Pressable onPress={() => onPress()} style={styles.leftAndMiddleContainer}>
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <View style={styles.middle}>
@@ -36,7 +35,6 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
                     </View>
                 </View>
             </Pressable>
-            {/* Sección derecha: Icono de corazón para favoritos */}
             <Pressable onPress={handleToggleFavorite} style={styles.iconContainer} hitSlop={32}>
                 {isFavorite ? (
                     <HeartIconFill fillColor={colors.tailorBlack} width={24} height={24} />
