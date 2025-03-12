@@ -16,6 +16,10 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
         toggleFavorite(item);
     };
 
+    const normalizedAddress = item.address.length > 45
+        ? `${item.address.slice(0, 45)}...`
+        : item.address;
+
     const averageRating =
         item.reviews.length > 0
             ? item.reviews.reduce((sum, review) => sum + review.rating, 0) / item.reviews.length
@@ -29,7 +33,7 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
                     <TextBase weight="bold" size={14}>
                         {item.name}
                     </TextBase>
-                    <TextBase size={12}>{item.address}</TextBase>
+                    <TextBase size={12}>{normalizedAddress}</TextBase>
                     <View style={styles.cardRating}>
                         <RatingStars rating={averageRating} />
                     </View>
@@ -56,6 +60,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingLeft: 6,
         paddingRight: 12,
+        paddingVertical: 3,
         marginVertical: 48,
         width: 300,
         elevation: 3,

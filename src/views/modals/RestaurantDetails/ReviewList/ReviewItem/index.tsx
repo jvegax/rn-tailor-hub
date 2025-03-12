@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import React, { FC, memo } from 'react';
 import { colors } from '@/common/theme/colors';
 import TextBase from '@/common/components/TextBase';
@@ -14,8 +14,7 @@ const ReviewItem: FC<Props> = ({
     restaurantId,
     refetch,
 }) => {
-    console.log('userData', userData);
-    const { mutate: deleteComment } = useDeleteComment({
+    const { mutate: deleteComment, isPending } = useDeleteComment({
         restaurantId,
         commentId: review.id,
         onDeleteSuccess: refetch,
@@ -24,6 +23,7 @@ const ReviewItem: FC<Props> = ({
     const handleDeleteReview = () => {
         deleteComment();
     };
+
     return (
         <View key={index}>
             <View style={styles.titleRow}>
@@ -39,9 +39,13 @@ const ReviewItem: FC<Props> = ({
             {userData && userData.name === review.owner && (
                 <View style={styles.actionsContainer}>
                     <Pressable onPress={handleDeleteReview} style={styles.deleteButton}>
-                        <TextBase size={16} weight="bold" color="tailorBlack">
-                            Eliminar
-                        </TextBase>
+                        {isPending ? (
+                            <ActivityIndicator size="small" color={colors.tailorBlack} />
+                        ) : (
+                            <TextBase size={16} weight="bold" color="tailorBlack">
+                                Eliminar
+                            </TextBase>
+                        )}
                     </Pressable>
                 </View>
             )}
@@ -69,9 +73,10 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     deleteButton: {
+        width: 130,
         borderWidth: 1,
         borderColor: colors.tailorBlack,
-        paddingVertical: 14,
+        paddingVertical: 18,
         paddingHorizontal: 24,
         borderRadius: 18,
         justifyContent: 'center',
