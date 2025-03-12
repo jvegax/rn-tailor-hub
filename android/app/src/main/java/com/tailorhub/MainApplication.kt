@@ -1,4 +1,4 @@
-package com.tailorhub
+package com.tailorhub.app
 
 import android.app.Application
 import com.facebook.react.PackageList

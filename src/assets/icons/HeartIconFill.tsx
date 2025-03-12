@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Svg, { SvgProps, Path } from 'react-native-svg';
-import { memo } from 'react';
 import { colors } from '@/common/theme/colors';
 
 interface HeartIconFilledProps extends SvgProps {
@@ -28,4 +27,4 @@ const HeartIconFilled: React.FC<HeartIconFilledProps> = ({
     </Svg>
 );
 
-export default memo(HeartIconFilled);
+export default HeartIconFilled;

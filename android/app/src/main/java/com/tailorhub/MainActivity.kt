@@ -1,4 +1,4 @@
-package com.tailorhub
+package com.tailorhub.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

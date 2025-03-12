@@ -1,0 +1,49 @@
+appId: com.tailorhub.app
+---
+- launchApp
+- tapOn:
+    id: 'login-email-input'
+- inputText: 'jvegax@gmail.com'
+- tapOn:
+    id: 'login-password-input'
+- inputText: '25jvegaxtailor'
+- tapOn:
+    id: 'login-submit'
+- tapOn:
+    id: 'fav-tab'
+- tapOn:
+    id: 'restaurant-item-0'
+- tapOn:
+    id: 'star-4'
+- tapOn:
+    id: 'comment-input'
+- inputText:
+    text: 'Test e2e usando maestro 🚀'
+- tapOn:
+    id: 'submit-comment'
+- tapOn:
+    id: 'submit-comment'
+- scrollUntilVisible:
+    element:
+      text: 'Eliminar'
+- assertVisible:
+    text: 'Eliminar'
+- tapOn:
+    text: 'Eliminar'
+- tapOn:
+    id: 'vertical-dots-menu'
+- extendedWaitUntil:
+    visible: 'Editar'
+- assertVisible:
+    text: 'Editar'
+- tapOn:
+    id: 'edit-restaurant'
+- tapOn:
+    id: 'restaurant-description-input'
+- eraseText
+- inputText: 'Test e2e usando maestro 🚀'
+- hideKeyboard
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    id: 'submit-restaurant-form'

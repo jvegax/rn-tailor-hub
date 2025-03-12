@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { memo } from 'react';
 import { colors } from '@/common/theme/colors';
 import { IconProps } from './types';
 
@@ -22,4 +21,4 @@ const GoBackIcon = ({ color = colors.tailorWhite, ...props }: IconProps) => (
     </Svg>
 );
 
-export default memo(GoBackIcon);
+export default GoBackIcon;

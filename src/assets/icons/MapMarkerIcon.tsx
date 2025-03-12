@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { colors } from '@/common/theme/colors';
 import { IconProps } from './types';
 
@@ -25,4 +25,4 @@ const MapMarkerIcon: FC<IconProps> = ({
     </Svg>
 );
 
-export default memo(MapMarkerIcon);
+export default MapMarkerIcon;

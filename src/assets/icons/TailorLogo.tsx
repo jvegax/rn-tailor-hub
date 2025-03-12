@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { memo } from 'react';
 import { IconProps } from './types';
 import { colors } from '@/common/theme/colors';
 
@@ -19,4 +18,4 @@ const TailorLogo = ({ size = 154, color = colors.tailorBlack, ...props }: IconPr
     </Svg>
 );
 
-export default memo(TailorLogo);
+export default TailorLogo;

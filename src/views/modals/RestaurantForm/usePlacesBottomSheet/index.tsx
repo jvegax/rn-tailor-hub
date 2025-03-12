@@ -4,6 +4,7 @@ import { SearchRestaurantResult } from '@/features/places/models';
 import { searchPlaces } from '@/features/places/data/searchPlaces';
 import { Keyboard } from 'react-native';
 import { RestaurantForm } from '../form/types';
+import { debounce } from 'lodash';
 
 type Props = { form: RestaurantForm };
 
@@ -21,18 +22,24 @@ export const usePlacesBottomSheet = ({ form }: Props) => {
         bottomSheetModalRef.current?.close();
     }, []);
 
-    const handleSearch = async (query: string) => {
+    const handleDebouncedSearch = useMemo(
+        () =>
+            debounce(async (query: string) => {
+                if (query.trim().length > 2) {
+                    try {
+                        const results = await searchPlaces(query);
+                        setSearchResults(results.slice(0, 10));
+                    } catch (error) {
+                        console.error('Error en la búsqueda:', error);
+                    }
+                }
+            }, 250),
+        []
+    );
+
+    const handleSearch = (query: string) => {
         setSearchQuery(query);
-        if (query.trim().length > 0) {
-            try {
-                const results = await searchPlaces(query);
-                setSearchResults(results.slice(0, 10));
-            } catch (error) {
-                console.error('Error en la búsqueda:', error);
-            }
-        } else {
-            setSearchResults([]);
-        }
+        handleDebouncedSearch(query);
     };
 
     const handleSelectResult = useCallback((result: SearchRestaurantResult) => {

@@ -25,7 +25,12 @@ const ReviewForm: FC<Props> = ({ restaurantId, refetch }) => {
                             {Array.from({ length: 5 }).map((_, index) => {
                                 const starIndex = index + 1;
                                 return (
-                                    <Pressable key={starIndex} onPress={() => onChange(starIndex)}>
+                                    <Pressable
+                                        testID={`star-${starIndex}`}
+                                        accessibilityLabel={`star-${starIndex}`}
+                                        key={starIndex}
+                                        onPress={() => onChange(starIndex)}
+                                    >
                                         <StarReviewIcon
                                             fillPercentage={starIndex <= value ? 1 : 0}
                                             width={24}
@@ -49,6 +54,7 @@ const ReviewForm: FC<Props> = ({ restaurantId, refetch }) => {
                 render={({ field: { value, onChange } }) => (
                     <View>
                         <TextInput
+                            testID="comment-input"
                             style={[styles.input, errors.comment && styles.inputError]}
                             placeholder="Escribe tu comentario sobre el restaurante..."
                             placeholderTextColor={colors.tailorGrayIcon}
@@ -74,7 +80,7 @@ const ReviewForm: FC<Props> = ({ restaurantId, refetch }) => {
                 {isSubmitting ? (
                     <ActivityIndicator size="small" color={colors.tailorBlack} />
                 ) : (
-                    <TextBase weight="bold" size={16} color="tailorBlack">
+                    <TextBase testID="submit-comment" weight="bold" size={16} color="tailorBlack">
                         Enviar
                     </TextBase>
                 )}

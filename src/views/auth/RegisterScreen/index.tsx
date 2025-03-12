@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import Animated, {
     useSharedValue,
@@ -13,7 +13,7 @@ import TextBase from '@/common/components/TextBase';
 import { colors } from '@/common/theme/colors';
 import { useRegisterForm } from './form';
 
-export const RegisterScreen = () => {
+export const RegisterScreen: FC = () => {
     const { form, submitForm } = useRegisterForm();
     const {
         formState: { isSubmitting },
@@ -55,17 +55,11 @@ export const RegisterScreen = () => {
     return (
         <View style={styles.container}>
             <TailorLogo color={colors.tailorBlue} />
-
-            {/* Contenedor principal del formulario */}
             <View style={styles.form}>
-                {/* Flecha arriba a la izquierda, fuera del flujo normal */}
                 <Pressable style={styles.arrowContainer} onPress={handleArrowPress}>
                     <ArrowLeftIcon />
                 </Pressable>
-
-                {/* Contenedor relativo donde se “pegan” los inputs abajo */}
                 <View style={styles.groupsContainer}>
-                    {/* Grupo inicial (Email y Nombre de usuario) */}
                     <Animated.View style={[initialGroupStyle, styles.groupInitial]}>
                         <Controller
                             control={form.control}
@@ -106,7 +100,6 @@ export const RegisterScreen = () => {
                             )}
                         />
                     </Animated.View>
-                    {/* Grupo final (Crear contraseña) */}
                     <Animated.View style={[finalGroupStyle, styles.groupFinal]}>
                         <Controller
                             control={form.control}
@@ -210,5 +203,3 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
 });
-
-export default RegisterScreen;
