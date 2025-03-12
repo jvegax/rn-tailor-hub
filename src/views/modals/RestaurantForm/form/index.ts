@@ -5,8 +5,7 @@ import { Platform } from 'react-native';
 import { defaultRestaurantValues } from './mock';
 import { Props, RestaurantForm } from './types';
 import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
+import { API_URL } from '@/core/api';
 
 export const useRestaurantForm = ({ navigation, restaurant, type }: Props): {
     form: RestaurantForm;
