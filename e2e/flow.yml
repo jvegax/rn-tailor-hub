@@ -1,0 +1,11 @@
+appId: com.tailorhub.app
+---
+- launchApp
+- tapOn:
+    id: 'login-email-input'
+- inputText: 'jvegax@gmail.com'
+- tapOn:
+    id: 'login-password-input'
+- inputText: '25jvegaxtailor'
+- tapOn:
+    id: 'login-submit'
