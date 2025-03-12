@@ -7,7 +7,7 @@ const FAVORITES_KEY = 'favourite_restaurants';
 interface FavoritesContextType {
   favorites: Restaurant[];
   addFavorite: (restaurant: Restaurant) => void;
-  removeFavorite: (restaurantId: number) => void;
+  removeFavorite: (restaurantId: string) => void;
   toggleFavorite: (restaurant: Restaurant) => void;
 }
 
@@ -38,7 +38,7 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   };
 
-  const removeFavorite = (restaurantId: number) => {
+  const removeFavorite = (restaurantId: string) => {
     saveFavorites(favorites.filter(r => r.id !== restaurantId));
   };
 

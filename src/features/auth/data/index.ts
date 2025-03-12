@@ -93,18 +93,19 @@ export async function logout(): Promise<void> {
 
 type AuthFetchProps = {
     url: string;
-    options: RequestInit;
+    options?: RequestInit;
     logoutHandler: () => void;
 };
+
 export async function authFetch({
     url,
-    options,
+    options = {},
     logoutHandler,
 }: AuthFetchProps): Promise<Response> {
     const token = storage.getString('authToken');
     const headers = options.headers ? new Headers(options.headers) : new Headers();
     if (token) {
-        headers.set('Authorization', token);
+        headers.set('Authorization', `${token}`);
     }
     options.headers = headers;
 
@@ -113,11 +114,12 @@ export async function authFetch({
     if (response.status === 401) {
         const newToken = await refreshToken();
         if (newToken) {
-            headers.set('Authorization', newToken);
+            headers.set('Authorization', `${newToken}`);
             options.headers = headers;
             response = await fetch(url, options);
         } else {
             logoutHandler();
+            throw new Error('Token expirado. Usuario desconectado.');
         }
     }
 

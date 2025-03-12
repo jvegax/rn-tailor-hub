@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback } from 'react';
 import {
     View,
     StyleSheet,
@@ -10,6 +10,7 @@ import {
 import { Controller } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
+    BottomSheetBackdropProps,
     BottomSheetModal,
     BottomSheetModalProvider,
     BottomSheetTextInput,
@@ -23,7 +24,7 @@ import { useRestaurantForm } from './form';
 import { colors } from '@/common/theme/colors';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import CustomBackdrop from '@/common/components/CustomBackdrop';
-import { usePlacesBottomSheet } from './bottom-sheet';
+import { usePlacesBottomSheet } from './usePlacesBottomSheet';
 import SearchIcon from '@/assets/icons/SearchIcon';
 import { MainStackParamList } from '@/core/navigation/types';
 
@@ -45,16 +46,9 @@ export const CreateNewRestaurant: FC = () => {
     } = bottomSheetModal;
     const imageValue = form.watch('image');
 
-    const handleSubmit = async () => {
-        try {
-            const result = await submitForm();
-            if (result) {
-                navigation.navigate('RestaurantDetails', { id: result.id });
-            }
-        } catch (error) {
-            // La alerta ya se mostró en el hook.
-        }
-    };
+    const backdropComponent = useCallback((props: BottomSheetBackdropProps) => (
+        <CustomBackdrop {...props} onPress={closeSearchModal} />
+    ), [closeSearchModal]);
 
     return (
         <BottomSheetModalProvider>
@@ -142,7 +136,7 @@ export const CreateNewRestaurant: FC = () => {
                     />
                 </View>
                 <Pressable
-                    onPress={handleSubmit}
+                    onPress={submitForm}
                     style={[styles.button, isSubmitting && styles.disabledButton]}
                     disabled={isSubmitting}
                 >
@@ -155,7 +149,6 @@ export const CreateNewRestaurant: FC = () => {
                     )}
                 </Pressable>
             </View>
-            {/* Bottom Sheet Modal para búsqueda */}
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 index={0}
@@ -163,9 +156,7 @@ export const CreateNewRestaurant: FC = () => {
                 keyboardBehavior="extend"
                 enableDynamicSizing={false}
                 backgroundStyle={styles.bottomSheetBackground}
-                backdropComponent={(props) => (
-                    <CustomBackdrop {...props} onPress={closeSearchModal} />
-                )}
+                backdropComponent={backdropComponent}
             >
                 <BottomSheetView style={styles.sheetContent}>
                     <TextBase weight="bold" size={24} color="tailorBlack">

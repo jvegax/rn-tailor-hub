@@ -23,7 +23,7 @@ export const useRestaurantForm = ({ navigation }: Props): {
             const formData = new FormData();
 
             if (data.image) {
-                const filename = data.image.split('/').pop() || 'image.jpg';
+                const filename = data.image.split('/').pop() ?? 'image.jpg';
                 const match = /\.(\w+)$/.exec(filename);
                 const type = match ? `image/${match[1].toLowerCase()}` : 'image';
                 const normalizedUri =

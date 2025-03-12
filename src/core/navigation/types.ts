@@ -23,7 +23,7 @@ export type MainTabParamList = {
 export type MainStackParamList = {
     MainTabs: NavigatorScreenParams<MainTabParamList>;
     CreateNewRestaurant: undefined;
-    RestaurantDetails: { id: number };
+    RestaurantDetails: { id: string };
     CreateRestaurantResultScreen: { status: 'success' | 'error' };
 };
 

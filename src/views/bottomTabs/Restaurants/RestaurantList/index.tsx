@@ -1,21 +1,26 @@
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import React, { FC, memo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MainStackParamList } from '@/core/navigation/types';
-import RestaurantItem from '../../components/RestaurantItem';
-import { MOCK_RESTAURANTS } from '@/features/restaurants/mock';
 import { Restaurant } from '@/features/restaurants/models';
-import { NavigationProp } from '@react-navigation/native';
-
-type Props = {
-    navigation: NavigationProp<MainStackParamList>;
-};
+import { Props } from './types';
+import { useGetRestaurants } from '@/features/restaurants/hooks/useGetRestaurants';
+import NetworkData from '@/common/domain/NetworkData';
+import ErrorScreen from '@/common/components/ErrorScreen';
+import { colors } from '@/common/theme/colors';
+import RestaurantItem from '../../components/RestaurantItem';
 
 const RestaurantList: FC<Props> = ({ navigation }) => {
+    const {
+        data,
+        hasNextPage,
+        isFetchingNextPage,
+        refetch,
+        fetchNextPage,
+    } = useGetRestaurants();
     const insets = useSafeAreaInsets();
 
     const navigateRestaurantDetails = useCallback(
-        (id: number) => navigation.navigate('RestaurantDetails', { id }),
+        (id: string) => navigation.navigate('RestaurantDetails', { id }),
         [navigation]
     );
 
@@ -26,15 +31,52 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
         [navigateRestaurantDetails]
     );
 
+    const onEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+        }
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    const renderFooter = useCallback(() => {
+        if (!isFetchingNextPage) { return null; }
+        return (
+            <ActivityIndicator
+                size={'small'}
+                color={colors.tailorBlue}
+                style={styles.footerIndicator}
+            />
+        );
+    }, [isFetchingNextPage]);
+
+    const renderData = useCallback(
+        (data: Restaurant[]) => (
+            <FlatList
+                data={data}
+                renderItem={renderRestaurantItem}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={[
+                    styles.container,
+                    { paddingBottom: insets.bottom + 16 },
+                ]}
+                showsVerticalScrollIndicator={false}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={renderFooter}
+            />
+        ),
+        [renderRestaurantItem, insets, onEndReached, renderFooter]
+    );
+
+    const errorState = useCallback(
+        () => <ErrorScreen btnText="Reintentar" onPress={refetch} />,
+        [refetch]
+    );
+
     return (
-        <FlatList
-            data={MOCK_RESTAURANTS}
-            renderItem={renderRestaurantItem}
-            contentContainerStyle={[
-                styles.container,
-                { paddingBottom: insets.bottom + 16 },
-            ]}
-            showsVerticalScrollIndicator={false}
+        <NetworkData
+            data={data}
+            errorState={errorState}
+            renderData={renderData}
         />
     );
 };
@@ -45,5 +87,8 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 16,
+    },
+    footerIndicator: {
+        marginVertical: 16,
     },
 });

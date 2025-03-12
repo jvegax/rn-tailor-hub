@@ -15,7 +15,7 @@ export const Favourites = () => {
     const { favorites } = useFavorites();
 
     const navigateRestaurantDetails = useCallback(
-        (id: number) => navigation.navigate('RestaurantDetails', { id }),
+        (id: string) => navigation.navigate('RestaurantDetails', { id }),
         [navigation]
     );
 
