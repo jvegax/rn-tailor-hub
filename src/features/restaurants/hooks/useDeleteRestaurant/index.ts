@@ -13,8 +13,8 @@ export const useDeleteRestaurant = ({ id, onDeleteSuccess }: Props) => {
     return useMutation({
         mutationFn: () => deleteRestaurant({ id, fetchWithAuth }),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['getRestaurants'] }),
-                onDeleteSuccess();
+            queryClient.invalidateQueries({ queryKey: ['getRestaurants'] });
+            onDeleteSuccess();
         },
     });
 };

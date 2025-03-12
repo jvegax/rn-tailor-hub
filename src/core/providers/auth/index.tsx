@@ -22,6 +22,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [userData, setUserData] = useState<User | null>(null);
 
     useEffect(() => {
+        const userDataString = storage.getString('userData');
+        if (userDataString) {
+            try {
+                const parsedUserData = JSON.parse(userDataString) as User;
+                setUserData(parsedUserData);
+            } catch (error) {
+                console.error('Error parseando userData', error);
+            }
+        }
         const token = storage.getString('authToken');
         const refreshTokenVal = storage.getString('refreshToken');
         if (token && refreshTokenVal) {
