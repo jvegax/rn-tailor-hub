@@ -1,10 +1,10 @@
 import { Restaurant } from '@/features/restaurants/models';
 
-export function mapToRestaurant(data: any): Restaurant {
+export function mapToRestaurantDetails(data: any): Restaurant {
     return {
         id: data._id ?? '',
         name: data.name ?? '',
-        owner: data.owner ?? '',
+        owner: data.owner.name ?? '',
         description: data.description ?? '',
         address: data.address ?? '',
         latlng: {
@@ -15,7 +15,7 @@ export function mapToRestaurant(data: any): Restaurant {
         reviews: Array.isArray(data.reviews)
             ? data.reviews.map((review: any) => ({
                 id: review._id ?? '',
-                owner: review.owner ?? '',
+                owner: review.owner.name ?? '',
                 rating: review.rating ?? 0,
                 comment: review.comment ?? '',
                 date: review.date ?? '',

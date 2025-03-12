@@ -21,7 +21,7 @@ const RestaurantItem: FC<Props> = ({ item, onPress }) => {
     return (
         <View style={styles.container}>
             {/* Sección izquierda + central: Presionable para navegar */}
-            <Pressable onPress={() => onPress(item.id)} style={styles.leftAndMiddleContainer}>
+            <Pressable onPress={() => onPress()} style={styles.leftAndMiddleContainer}>
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <View style={styles.middle}>
                     <TextBase weight="bold" size={16}>

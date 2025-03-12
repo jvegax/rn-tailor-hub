@@ -38,7 +38,7 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
             <TextBase color="tailorWhite" size={24} weight="bold" style={styles.title}>
                 {restaurant.name}
             </TextBase>
-            <TextBase color="tailorWhite" size={16}>
+            <TextBase color="tailorWhite" size={16} style={styles.address}>
                 {restaurant.address}
             </TextBase>
         </ImageBackground>
@@ -79,5 +79,8 @@ const styles = StyleSheet.create({
         height: 32,
         borderRadius: 16,
         backgroundColor: '#F1F1F04D',
+    },
+    address: {
+        textAlign: 'center',
     },
 });

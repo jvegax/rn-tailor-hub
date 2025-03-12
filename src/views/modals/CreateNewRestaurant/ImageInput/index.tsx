@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         borderRadius: 24,
     },
     removeButtonText: {
-        color: '#fff',
+        color: colors.tailorWhite,
         fontSize: 16,
     },
 });

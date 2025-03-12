@@ -19,10 +19,9 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
     } = useGetRestaurants();
     const insets = useSafeAreaInsets();
 
-    const navigateRestaurantDetails = useCallback(
-        (id: string) => navigation.navigate('RestaurantDetails', { id }),
-        [navigation]
-    );
+    const navigateRestaurantDetails = useCallback((id: string) => {
+        navigation.navigate('RestaurantDetails', { id });
+    }, [navigation]);
 
     const renderRestaurantItem = useCallback(
         ({ item }: { item: Restaurant }) => (
@@ -67,7 +66,7 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
         [renderRestaurantItem, insets, onEndReached, renderFooter]
     );
 
-    const errorState = useCallback(
+    const renderNetworkError = useCallback(
         () => <ErrorScreen btnText="Reintentar" onPress={refetch} />,
         [refetch]
     );
@@ -75,8 +74,8 @@ const RestaurantList: FC<Props> = ({ navigation }) => {
     return (
         <NetworkData
             data={data}
-            errorState={errorState}
             renderData={renderData}
+            renderNetworkError={renderNetworkError}
         />
     );
 };

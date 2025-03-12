@@ -16,5 +16,5 @@ export type NetworkData<T> =
 export type Props<T> = {
     data: NetworkData<T>;
     renderData: (data: T) => JSX.Element;
-    errorState?: () => JSX.Element;
+    renderNetworkError?: () => JSX.Element;
 };
