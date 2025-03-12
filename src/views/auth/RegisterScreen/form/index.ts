@@ -16,7 +16,7 @@ export const useRegisterForm = () => {
 
     const onSubmit = form.handleSubmit(async (data) => {
         const { email, password, name } = data;
-        register(email, password, name);
+        await register(email, password, name);
     });
 
     return { form, submitForm: onSubmit };

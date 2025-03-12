@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { storage } from '@/core/cache';
 import { User } from '../models';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
+import { API_URL } from '@/core/api';
 
 type LoginResponse = { token: string; refreshToken: string, userData: User } | null;
 export async function login(email: string, password: string): Promise<LoginResponse> {
@@ -62,32 +62,11 @@ export async function register(email: string, password: string, name: string): P
         if (!response.ok) {
             return null;
         }
-
-        const token = response.headers.get('authorization');
-
-        const setCookie = response.headers.get('set-cookie');
-        let refreshToken = '';
-        if (setCookie) {
-            const match = setCookie.match(/refreshToken=([^;]+)/);
-            if (match) {
-                refreshToken = match[1];
-            }
-        }
-
-        if (!token || !refreshToken) {
+        const loginResponse = await login(email, password);
+        if (!loginResponse) {
             return null;
         }
-
-        const body = await response.json();
-        const userData: User = {
-            id: body._id,
-            email: body.email,
-            name: body.name,
-        };
-        storage.set('userData', JSON.stringify(userData));
-        storage.set('authToken', token);
-        storage.set('refreshToken', refreshToken);
-
+        const { token, refreshToken, userData } = loginResponse;
         return { token, refreshToken, userData };
     } catch (error) {
         return null;
