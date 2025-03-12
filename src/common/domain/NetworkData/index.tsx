@@ -3,7 +3,7 @@ import type { Props } from './types';
 import { colors } from '@/common/theme/colors';
 import ErrorScreen from '@/common/components/ErrorScreen';
 
-const NetworkData = <T,>({ data, renderData, errorState }: Props<T>) => {
+const NetworkData = <T,>({ data, renderData, renderNetworkError }: Props<T>) => {
     if (data.type === 'loading') {
         return (
             <View style={styles.loader}>
@@ -13,7 +13,7 @@ const NetworkData = <T,>({ data, renderData, errorState }: Props<T>) => {
     }
 
     if (data.type === 'error') {
-        return errorState ? errorState() : <ErrorScreen />;
+        return renderNetworkError ? renderNetworkError() : <ErrorScreen />;
     }
 
     return renderData(data.data);

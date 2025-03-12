@@ -3,38 +3,34 @@ import { getRestaurantById } from '../../data/getRestaurantById';
 import { NetworkData } from '@/common/domain/NetworkData/types';
 import { Restaurant } from '../../models';
 import { useMemo } from 'react';
+import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
 
-export const useGetRestaurantById = (id: string): NetworkData<Restaurant> => {
+export const useGetRestaurantById = (id: string) => {
+    const fetchWithAuth = useAuthFetch();
     const {
         data,
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ['getRestaurantById', id],
-        queryFn: () => getRestaurantById(id),
+        queryKey: ['getRestaurantById', id, fetchWithAuth],
+        queryFn: () => getRestaurantById({ id, fetchWithAuth }),
         enabled: !!id,
     });
 
-    const networkData = useMemo(() => {
+    const networkData = useMemo<NetworkData<Restaurant>>(() => {
         if (isLoading) {
-            const loading: NetworkData<Restaurant> = { type: 'loading' };
-            return loading;
+            return { type: 'loading' };
         }
 
         if (isError || !data) {
-            const error: NetworkData<Restaurant> = {
+            return {
                 type: 'error',
                 message: 'Error al obtener el restaurante',
             };
-            return error;
         }
 
-        const restaurant: NetworkData<Restaurant> = {
-            type: 'data',
-            data,
-        };
-        return restaurant;
+        return { type: 'data', data };
     }, [data, isLoading, isError]);
 
-    return networkData;
+    return { data: networkData };
 };

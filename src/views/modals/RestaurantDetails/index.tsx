@@ -18,9 +18,9 @@ export const RestaurantDetails: FC = () => {
     const navigation = useNavigation();
     const { top } = useSafeAreaInsets();
     const { params } = useRoute<RestaurantDetailsRouteProp>();
-    const networkData = useGetRestaurantById(params.id);
+    const { data } = useGetRestaurantById(params.id);
 
-    const renderRestaurantDetails = useCallback((data: Restaurant) => (
+    const renderData = useCallback((data: Restaurant) => (
         <ScrollView
             style={[styles.container, { paddingTop: top }]}
             showsVerticalScrollIndicator={false}
@@ -28,7 +28,7 @@ export const RestaurantDetails: FC = () => {
             <Header restaurant={data} goBack={navigation.goBack} />
             <View style={styles.descriptionContainer}>
                 <TextBase size={16} style={styles.descriptionText}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, perspiciatis possimus? Sunt dolorum fuga ab optio dolores nobis adipisci beatae laborum, earum, facilis eius quos, id ullam aliquam qui molestias?
+                    {data.description}
                 </TextBase>
             </View>
             <ReviewForm />
@@ -38,8 +38,8 @@ export const RestaurantDetails: FC = () => {
 
     return (
         <NetworkData
-            data={networkData}
-            renderData={renderRestaurantDetails}
+            data={data}
+            renderData={renderData}
         />
     );
 };

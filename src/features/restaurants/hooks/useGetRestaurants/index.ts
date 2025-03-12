@@ -21,7 +21,11 @@ export const useGetRestaurants = () => {
     } = useInfiniteQuery<Restaurant[], Error>({
         queryKey: ['getRestaurants'],
         queryFn: ({ pageParam = 1 }) =>
-            getRestaurants({ page: pageParam as number, limit: 10, fetchWithAuth }),
+            getRestaurants({
+                page: pageParam as number,
+                limit: 10,
+                fetchWithAuth,
+            }),
         initialPageParam: 1,
         getNextPageParam: (lastPage, _, lastPageParam: any) => {
             return lastPage.length === 10 ? lastPageParam + 1 : undefined;
@@ -40,5 +44,11 @@ export const useGetRestaurants = () => {
         return { type: 'data', data: restaurants };
     }, [data, isFetching, isError, error, isRefetching, isRefetchError, isFetchingNextPage]);
 
-    return { data: networkData, fetchNextPage, hasNextPage, isFetchingNextPage, refetch };
+    return {
+        data: networkData,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        refetch,
+    };
 };

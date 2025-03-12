@@ -59,6 +59,29 @@ const RestaurantMap: FC = () => {
         [renderCard, renderFooter, onEndReached]
     );
 
+    const renderMapMarkers = useCallback(() => {
+        if (data?.type === 'data') {
+            return data.data.map((restaurant: Restaurant) => (
+                <Marker
+                    key={restaurant.id}
+                    coordinate={{
+                        latitude: restaurant.latlng.lat,
+                        longitude: restaurant.latlng.lng,
+                    }}
+                >
+                    <MapMarkerIcon size={48} />
+                    <Callout tooltip onPress={handlePressTooltip}>
+                        <View style={styles.badgeContainer}>
+                            <TextBase weight="bold" size={14} color="tailorWhite">
+                                {restaurant.name}
+                            </TextBase>
+                        </View>
+                    </Callout>
+                </Marker>
+            ));
+        }
+        return null;
+    }, [data, handlePressTooltip]);
     return (
         <View style={styles.container}>
             <View style={styles.mapWrapper}>
@@ -72,24 +95,7 @@ const RestaurantMap: FC = () => {
                         longitudeDelta: 0.0421,
                     }}
                 >
-                    {data?.type === 'data' && data.data.map((restaurant: Restaurant) => (
-                        <Marker
-                            key={restaurant.id}
-                            coordinate={{
-                                latitude: restaurant.latlng.lat,
-                                longitude: restaurant.latlng.lng,
-                            }}
-                        >
-                            <MapMarkerIcon size={48} />
-                            <Callout tooltip onPress={handlePressTooltip}>
-                                <View style={styles.badgeContainer}>
-                                    <TextBase weight="bold" size={14} color="tailorWhite">
-                                        {restaurant.name}
-                                    </TextBase>
-                                </View>
-                            </Callout>
-                        </Marker>
-                    ))}
+                    {renderMapMarkers()}
                 </MapView>
                 <View style={styles.cardsContainer}>
                     <NetworkData
