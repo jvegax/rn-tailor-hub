@@ -32,7 +32,6 @@ export const useRestaurantForm = ({ navigation, restaurant, type }: Props): {
     const onSubmit = form.handleSubmit(async (data) => {
         try {
             const formData = new FormData();
-
             if (data.image) {
                 const filename = data.image.split('/').pop() ?? 'image.jpg';
                 const match = /\.(\w+)$/.exec(filename);

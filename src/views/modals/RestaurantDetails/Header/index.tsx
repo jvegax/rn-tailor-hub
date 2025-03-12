@@ -18,10 +18,15 @@ import VerticalDotsIcon from '@/assets/icons/VerticalDotsIcon';
 import { Portal } from '@gorhom/portal';
 import { useNavigation } from '@react-navigation/native';
 import { MainStackNavigationProp } from '@/core/navigation/types';
+import { useDeleteRestaurant } from '@/features/restaurants/hooks/useDeleteRestaurant';
 
-const Header: FC<Props> = ({ restaurant, goBack }) => {
+const Header: FC<Props> = ({ restaurant, goBack, onDeleteSuccess }) => {
     const navigation = useNavigation<MainStackNavigationProp>();
     const { favorites, toggleFavorite } = useFavorites();
+    const { mutate: deleteRestaurant } = useDeleteRestaurant({
+        id: restaurant.id,
+        onDeleteSuccess,
+    });
     const isFavorite = favorites.some(r => r.id === restaurant.id);
     const insets = useSafeAreaInsets();
     const [portalVisible, setPortalVisible] = useState(false);
@@ -40,9 +45,9 @@ const Header: FC<Props> = ({ restaurant, goBack }) => {
     }, [navigation, restaurant]);
 
     const handleDelete = useCallback(() => {
-        console.log('Acción Eliminar');
+        deleteRestaurant();
         setPortalVisible(false);
-    }, []);
+    }, [deleteRestaurant]);
 
     return (
         <>

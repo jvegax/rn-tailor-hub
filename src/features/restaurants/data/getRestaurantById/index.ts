@@ -1,8 +1,7 @@
 import { FetchWithAuth } from '@/features/auth/hooks/useAuthFetch';
 import { Restaurant } from '../../models';
 import { mapToRestaurantDetails } from '../../models/mapToRestaurantDetails';
-
-const API_URL = 'https://technical-review-api-tailor.netlify.app/api';
+import { API_URL } from '@/core/api';
 
 type Props = {
     id: string;
