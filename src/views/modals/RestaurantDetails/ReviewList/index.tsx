@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { Restaurant } from '@/features/restaurants/models';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextBase from '@/common/components/TextBase';
@@ -11,7 +11,7 @@ type Props = { reviews: Restaurant['reviews'] }
 const ReviewList: FC<Props> = ({ reviews }) => {
     const { bottom } = useSafeAreaInsets();
 
-    const renderReviews = reviews.map((review, index) => (
+    const renderReviews = useMemo(() => reviews.map((review, index) => (
         <View key={index}>
             <View style={styles.titleRow}>
                 <TextBase weight="bold" size={16}>
@@ -24,7 +24,7 @@ const ReviewList: FC<Props> = ({ reviews }) => {
             </TextBase>
             {index !== reviews.length - 1 && <View style={styles.separator} />}
         </View>
-    ));
+    )), [reviews]);
 
     return (
         <View style={[styles.container, { marginBottom: bottom + 48 }]}>

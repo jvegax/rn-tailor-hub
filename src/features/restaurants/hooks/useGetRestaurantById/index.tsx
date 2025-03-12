@@ -5,12 +5,18 @@ import { Restaurant } from '../../models';
 import { useMemo } from 'react';
 import { useAuthFetch } from '@/features/auth/hooks/useAuthFetch';
 
-export const useGetRestaurantById = (id: string) => {
+type Props = {
+    id: string
+};
+export const useGetRestaurantById = ({ id }: Props) => {
     const fetchWithAuth = useAuthFetch();
     const {
         data,
         isLoading,
         isError,
+        refetch,
+        isRefetching,
+        isRefetchError,
     } = useQuery({
         queryKey: ['getRestaurantById', id, fetchWithAuth],
         queryFn: () => getRestaurantById({ id, fetchWithAuth }),
@@ -18,11 +24,11 @@ export const useGetRestaurantById = (id: string) => {
     });
 
     const networkData = useMemo<NetworkData<Restaurant>>(() => {
-        if (isLoading) {
+        if (isLoading || isRefetching) {
             return { type: 'loading' };
         }
 
-        if (isError || !data) {
+        if (isError || !data || isRefetchError) {
             return {
                 type: 'error',
                 message: 'Error al obtener el restaurante',
@@ -30,7 +36,7 @@ export const useGetRestaurantById = (id: string) => {
         }
 
         return { type: 'data', data };
-    }, [data, isLoading, isError]);
+    }, [data, isLoading, isError, isRefetching, isRefetchError]);
 
-    return { data: networkData };
+    return { data: networkData, refetch };
 };

@@ -18,7 +18,7 @@ export const RestaurantDetails: FC = () => {
     const navigation = useNavigation();
     const { top } = useSafeAreaInsets();
     const { params } = useRoute<RestaurantDetailsRouteProp>();
-    const { data } = useGetRestaurantById(params.id);
+    const { data, refetch } = useGetRestaurantById({ id: params.id });
 
     const renderData = useCallback((data: Restaurant) => (
         <ScrollView
@@ -31,10 +31,10 @@ export const RestaurantDetails: FC = () => {
                     {data.description}
                 </TextBase>
             </View>
-            <ReviewForm />
+            <ReviewForm restaurantId={data.id} refetch={refetch} />
             <ReviewList reviews={data.reviews} />
         </ScrollView>
-    ), [navigation, top]);
+    ), [navigation, top, refetch]);
 
     return (
         <NetworkData
