@@ -127,6 +127,9 @@ The objective of this technical review is to create a Restaurant application usi
 
 The app has been tested end-to-end using Maestro to simulate a full user flow:
 
+https://github.com/user-attachments/assets/a155d62b-d0e8-4699-aff7-d67228d1b3c9
+
+
 - Login
 - Navigation between screens
 - Creating restaurant reviews
