@@ -1,8 +1,6 @@
 # Tailor Restaurants
 
-**Tailor Restaurants** is a React Native app created using rn CLI. 
-
-Tailor Restaurants is a React Native application developed using React Native CLI. This app allows users to seamlessly view, add, edit, and delete restaurants, as well as create and delete reviews. Additionally, users can interact with an integrated map screen, where tapping on restaurant markers displays location details and enables navigation to detailed restaurant information. The application is built with robust libraries for form handling, data fetching, and validation, ensuring a smooth and reliable user experience.
+A React Native application developed using React Native CLI. This app allows users to seamlessly view, add, edit, and delete restaurants, as well as create and delete reviews. Additionally, users can interact with an integrated map screen, where tapping on restaurant markers displays location details and enables navigation to detailed restaurant information. The application is built with robust libraries for form handling, data fetching, and validation, ensuring a smooth and reliable user experience.
 
 ## Table of Contents
 
