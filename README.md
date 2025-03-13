@@ -5,6 +5,7 @@ A React Native application developed using React Native CLI. This app allows use
 ## Table of Contents
 
 - [Overview](#overview)
+- [App showcase](#app-showcase)
 - [Features](#features)
 - [Folder Structure](#folder-structure)
 - [Technical Approach](#technical-approach)
@@ -17,6 +18,11 @@ A React Native application developed using React Native CLI. This app allows use
 ## Overview
 
 The objective of this technical review is to create a Restaurant application using React Native CLI (no Expo) that enables users to manage restaurant data. The app communicates with a simple backend API (see [Technical Review API](https://github.com/TailorHub-Mad/technical_review_api)) and follows the design guidelines provided in a [Figma design](https://www.figma.com/design/LuwjRZZb3ms0MeAmu7gZch/Tailor-Prueba-t%C3%A9cnica-Junior?node-id=1235-1831&t=QBe1sh3ejkqnEot3-1).
+
+## App showcase
+
+https://github.com/user-attachments/assets/11797d3f-ed28-4681-8eaf-ac8d300c61de
+
 
 ## Features
 
