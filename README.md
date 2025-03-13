@@ -1,6 +1,8 @@
 # Tailor Restaurants
 
-**Tailor Restaurants** is a React Native CLI application designed for viewing, adding, editing, and deleting restaurants. The app interacts with a provided backend API to manage restaurant data and includes user authentication, restaurant listings, detailed views, and a favorites feature.
+**Tailor Restaurants** is a React Native app created using rn CLI. 
+
+Tailor Restaurants is a React Native application developed using React Native CLI. This app allows users to seamlessly view, add, edit, and delete restaurants, as well as create and delete reviews. Additionally, users can interact with an integrated map screen, where tapping on restaurant markers displays location details and enables navigation to detailed restaurant information. The application is built with robust libraries for form handling, data fetching, and validation, ensuring a smooth and reliable user experience.
 
 ## Table of Contents
 
@@ -34,7 +36,6 @@ The objective of this technical review is to create a Restaurant application usi
 ## Folder Structure
 
 ```
-.
 ├── assets                  // SVG icons .tsx format
 ├── common
 │   ├── components          // Reusable UI components (e.g., TextBase, ErrorScreen)
@@ -77,7 +78,7 @@ The objective of this technical review is to create a Restaurant application usi
 
 - **React Native CLI:** The project is built using React Native CLI.
 - **Forms and Validation:** Forms are managed with **react-hook-form** and validated with **zod**. Custom hooks (e.g., useRestaurantForm) encapsulate form logic.
-- **Data Fetching:** **tanstack/react-query** is used for data fetching and caching, providing a robust mechanism for handling loading and error states.
+- **Data Fetching:** **tanstack/react-query** is used for data fetching, providing a robust mechanism for handling loading and error states.
 - **Authentication:** User authentication is implemented with token-based authentication. Tokens are stored using **MMKV**. The custom authFetch helper centralizes API requests by injecting tokens and handling token refreshes.
 - **Maps and Search:** **react-native-maps** displays restaurant markers on a map. Tapping a marker shows a callout with the restaurant’s name. A bottom sheet (via **@gorhom/bottom-sheet**) is used for searching restaurants through the Google Places API, integrating a search form and result list.
 - **Navigation:** Navigation is managed with **react-navigation** using a Drawer for main screens and two navigation stacks: one for authentication (Login/Register) and one for the main app (including tabs for Restaurants, Favorites, and Profile).
@@ -95,8 +96,8 @@ The objective of this technical review is to create a Restaurant application usi
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/tailor-restaurants.git
-   cd tailor-restaurants
+   git clone https://github.com/jvegax/rn-tailor-hub.git
+   cd rn-tailor-hub
    ```
 
 2. **Install dependencies:**
@@ -139,12 +140,9 @@ https://github.com/user-attachments/assets/a155d62b-d0e8-4699-aff7-d67228d1b3c9
 
 If given more development time, potential improvements include:
 
-- **Offline Support:** Implement caching strategies to support offline usage.
+- **Unit testing:** Implement unit tests using Jest as the test runner, along with React Native Testing Library to facilitate testing of components and hooks, and improve the existing E2E using maestro.
+- **Offline Support:** Implement caching strategies with react-query + MMKV to support offline usage
 - **Enhanced Error Handling:** More robust error reporting and user feedback.
 - **Additional Features:** Advanced search, filtering, and sorting of restaurants.
 - **Optimized Performance:** Improve performance on slow networks and large data sets.
 - **Design Enhancements:** Further align UI with the provided Figma design and add animations/transitions.
-
-## Deployment
-
-- **Android:** The app has been built and deployed for Android.
